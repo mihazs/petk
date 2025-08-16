@@ -1,10 +1,10 @@
-import { parseYAML } from '@petk/utils/src/parse-yaml';
+import { parseYaml } from '@petk/utils';
 import type { Directive, DirectiveType } from './types';
 
 export function parseDirective(yaml: string, type: DirectiveType): Directive {
     let data: any;
     try {
-        data = parseYAML(yaml);
+        data = parseYaml(yaml);
     } catch (e) {
         throw new Error('YAML parsing error: ' + (e instanceof Error ? e.message : String(e)));
     }

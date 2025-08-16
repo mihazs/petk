@@ -1,4 +1,4 @@
-export * from './types';
-export * from './block-extractor';
-export * from './parse-directive';
-export * from './parser';
+export { substituteVars } from './substitute-vars'
+export { assertNoCycle } from './cycle-detection'
+export { processTemplate } from './resolve-recursive'
+export type { IncludeResolver, ProcessOptions } from './resolve-recursive'
