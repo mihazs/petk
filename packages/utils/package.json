@@ -2,5 +2,19 @@
     "name": "@petk/utils",
     "version": "0.0.0",
     "main": "src/index.ts",
-    "license": "MIT"
+    "license": "MIT",
+    "scripts": {
+        "dev": "tsx --watch src/index.ts",
+        "build": "swc src -d dist --source-maps",
+        "test": "vitest run",
+        "lint": "eslint ."
+    },
+    "devDependencies": {
+        "@types/js-yaml": "^4.0.9",
+        "@types/node": "^24.3.0",
+        "vitest": "^3.2.4"
+    },
+    "dependencies": {
+        "js-yaml": "^4.1.0"
+    }
 }

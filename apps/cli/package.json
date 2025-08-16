@@ -1,0 +1,14 @@
+{
+    "name": "@petk/cli",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "main": "dist/index.js",
+    "scripts": {
+        "dev": "tsx --watch src/index.ts",
+        "build": "swc src -d dist --source-maps",
+        "test": "vitest run",
+        "lint": "eslint ."
+    },
+    "license": "MIT"
+}
