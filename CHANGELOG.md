@@ -2,6 +2,51 @@
 
 <!-- LLM_INSERT_CHANGELOG_HERE -->
 
+## [2025-08-16 23:31:55] Engine: glob pipeline utilities, deterministic shuffle, and expanded tests
+
+- **Type:** Added/Changed/Tested
+- **Docs:** [packages/engine/__tests__/glob-utils.test.ts], [packages/engine/__tests__/resolve-recursive.test.ts], [packages/engine/package.json]
+- **Architecture:** No changes to docs/README.md or documentation structure
+- **Summary:**
+  Introduced pure, functional glob pipeline utilities (expandGlob, sortEntries, shuffleDeterministic, sampleEntries, normalizePaths) to @petk/engine. Refactored and expanded unit and integration tests to directly cover all pipeline utilities, including deterministic shuffle, path normalization, deduplication, and error gating. Improved error handling and ensured deterministic, testable behavior throughout the pipeline. Confirmed glob@^11.0.3 is present in dependencies.
+
+  ### Added
+   - Pure utility modules for glob expansion, sorting, deterministic shuffling, sampling, and path normalization
+   - Direct unit tests for each glob utility
+   - Integration tests for glob pipeline in resolve-recursive
+
+  ### Fixed
+   - Error handling for invalid glob options and sample sizes
+   - Deterministic output for shuffle with seed
+
+  ### Changed
+   - Refactored tests to use new utility functions directly
+   - Updated integration tests to cover new pipeline features
+
+  ### Restructured
+   - N/A
+
+  ### To-do
+   - N/A
+
+  ### WIP
+   - N/A
+
+  ----
+
+## [2025-08-16 23:07:08] Fix: stringifyYaml returns 'null' for undefined values
+
+- **Type:** Fixed
+- **Docs:** N/A
+- **Architecture:** No changes to docs/README.md or documentation structure
+- **Summary:**
+  Fixed a bug in @petk/utils where `stringifyYaml(undefined)` returned an empty string due to js-yaml behavior. Now, undefined is treated as null for YAML output, matching test and YAML expectations.
+  
+  ### Fixed
+   - `stringifyYaml(undefined)` now returns `'null'` instead of an empty string.
+   - All related tests pass.
+  ----
+
 ## [2025-08-16 19:59:30] Engine core: recursion, substitutions, cycles
 
 - **Type:** Added

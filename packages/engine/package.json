@@ -15,6 +15,7 @@
         "vitest": "^3.2.4"
     },
     "dependencies": {
-        "@petk/utils": "workspace:*"
+        "@petk/utils": "workspace:*",
+        "glob": "^11.0.3"
     }
 }

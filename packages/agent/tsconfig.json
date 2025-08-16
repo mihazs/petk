@@ -4,9 +4,5 @@
     "rootDir": "./src",
     "outDir": "./dist"
   },
-    "compilerOptions": {
-        "outDir": "dist",
-        "rootDir": "src"
-    },
-    "include": ["src"]
+  "include": ["src"]
 }

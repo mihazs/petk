@@ -11,5 +11,8 @@
         "build": "swc src -d dist --source-maps",
         "test": "vitest run",
         "lint": "eslint ."
-    }
+      },
+      "devDependencies": {
+        "vitest": "^3.2.4"
+      }
 }
