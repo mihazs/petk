@@ -1,10 +1,5 @@
 <div align="center">
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-<circle cx="50" cy="75" r="18" fill="#1976D2" />
-<path d="M 0 0 C -7 -15, -7 -35, 0 -45 C 7 -35, 7 -15, 0 0 Z" fill="#2196F3" transform="translate(50 57) rotate(-15)" />
-<path d="M 0 0 C -7 -15, -7 -35, 0 -45 C 7 -35, 7 -15, 0 0 Z" fill="#2196F3" transform="translate(50 57) rotate(0)" />
-<path d="M 0 0 C -7 -15, -7 -35, 0 -45 C 7 -35, 7 -15, 0 0 Z" fill="#2196F3" transform="translate(50 57) rotate(15)" />
-</svg>
+<img src="./logo.svg" alt="Petk Logo" width="200" height="200">
 <h1>Petk 🏸</h1>
 </div>
 
@@ -99,4 +94,4 @@ Contributions are welcome\! Please read our `CONTRIBUTING.md` guide for details 
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
