@@ -2,5 +2,11 @@
     "name": "@petk/engine",
     "version": "0.0.0",
     "main": "src/index.ts",
-    "license": "MIT"
+    "license": "MIT",
+    "scripts": {
+        "dev": "tsx --watch src/index.ts",
+        "build": "swc src -d dist --source-maps",
+        "test": "vitest run",
+        "lint": "eslint ."
+    }
 }

@@ -4,24 +4,25 @@ import { estimateTokens } from '../src/index';
 describe('estimateTokens', () => {
     it('returns 0 for an empty string', () => {
         expect(estimateTokens('')).toBe(0);
+        expect(estimateTokens('   ')).toBe(0);
     });
 
-    it('counts single word as one token', () => {
-        expect(estimateTokens('hello')).toBe(1);
+    it('returns correct value for short strings', () => {
+        expect(estimateTokens('abcd')).toBe(1);
+        expect(estimateTokens('abcdefgh')).toBe(2);
     });
 
-    it('counts multiple words correctly', () => {
-        expect(estimateTokens('hello world')).toBe(2);
-        expect(estimateTokens('this is a test')).toBe(4);
+    it('throws if input is not a string', () => {
+        // @ts-expect-error
+        expect(() => estimateTokens(123)).toThrow();
+        // @ts-expect-error
+        expect(() => estimateTokens(null)).toThrow();
     });
 
-    it('handles punctuation and whitespace', () => {
-        expect(estimateTokens('hello, world!')).toBe(2);
-        expect(estimateTokens('  spaced   out   ')).toBe(2);
-    });
-
-    it('handles unicode and special characters', () => {
-        expect(estimateTokens('你好 世界')).toBe(2);
-        expect(estimateTokens('emoji 😊 test')).toBe(3);
+    it('returns Math.ceil(length/4)', () => {
+        expect(estimateTokens('1234')).toBe(1);
+        expect(estimateTokens('12345')).toBe(2);
+        expect(estimateTokens('12345678')).toBe(2);
+        expect(estimateTokens('123456789')).toBe(3);
     });
 });

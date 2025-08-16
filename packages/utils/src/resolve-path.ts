@@ -1,4 +1,6 @@
-import { resolve, normalize } from 'path';
+import path from 'path';
 
-export const resolvePath = (filePath: string, baseDir?: string): string =>
-    normalize(baseDir ? resolve(baseDir, filePath) : resolve(filePath));
+export const resolvePath = (basePath: string, targetPath: string): string => {
+    if (typeof basePath !== "string" || typeof targetPath !== "string") throw new Error("resolvePath: invalid inputs");
+    return path.resolve(basePath, targetPath);
+};

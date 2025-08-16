@@ -8,4 +8,17 @@ describe('stringifyYaml', () => {
         expect(result).toContain('foo: bar')
         expect(result).toContain('baz: 42')
     })
+
+    it('stringifies arrays', () => {
+        const arr = [1, 2, 3]
+        const result = stringifyYaml(arr)
+        expect(result).toContain('- 1')
+        expect(result).toContain('- 2')
+        expect(result).toContain('- 3')
+    })
+
+    it('stringifies null and undefined', () => {
+        expect(stringifyYaml(null)).toContain('null')
+        expect(stringifyYaml(undefined)).toContain('null')
+    })
 })
