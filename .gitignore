@@ -1,2 +1,4 @@
 .kilocode
 .kiloignore
+**/node_modules
+context_portal

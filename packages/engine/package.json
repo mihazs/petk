@@ -1,0 +1,6 @@
+{
+    "name": "@petk/engine",
+    "version": "0.0.0",
+    "main": "src/index.ts",
+    "license": "MIT"
+}
