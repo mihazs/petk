@@ -6,3 +6,6 @@ context_portal
 **/dist/**/*.*
 **/dist/src/**
 **/*.map
+**/.turbo
+coverage
+**/dist

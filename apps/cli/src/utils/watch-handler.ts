@@ -221,10 +221,20 @@ export const formatWatchEvent = (event: WatchEvent): string => {
 
 export const isWatchableFile = (filePath: string, patterns: string[]): boolean => {
     return patterns.some(pattern => {
-        const regexPattern = pattern
-            .replace(/\*\*/g, '.*')
+        // Handle brace expansion first (e.g., {ts,js} -> (ts|js))
+        let regexPattern = pattern.replace(/\{([^}]+)\}/g, (match, content) => {
+            return `(${content.split(',').join('|')})`;
+        });
+        
+        // Escape special regex characters except our glob patterns
+        regexPattern = regexPattern
+            .replace(/[.+^$()|[\]\\]/g, '\\$&')
+            .replace(/\*\*\//g, '___DOUBLESTAR_SLASH___')
+            .replace(/\*\*/g, '___DOUBLESTAR___')
             .replace(/\*/g, '[^/]*')
-            .replace(/\?/g, '.');
+            .replace(/\?/g, '[^/]')
+            .replace(/___DOUBLESTAR_SLASH___/g, '(?:.*/)?')
+            .replace(/___DOUBLESTAR___/g, '.*');
         
         return new RegExp(`^${regexPattern}$`).test(filePath);
     });
