@@ -1,0 +1,62 @@
+# Petk Configuration Sample
+# This demonstrates the configuration system with all available options
+
+# Global variables accessible throughout templates
+variables:
+  project_name: "Petk Toolkit"
+  version: "1.0.0"
+  author: "Development Team"
+  description: "A powerful template engine and documentation toolkit"
+
+# Template processing configuration
+template:
+  defaultExtension: "html"
+  optimization:
+    enabled: true
+    level: "standard"
+    minify: false
+    removeComments: false
+
+# File watching configuration for development
+watch:
+  patterns:
+    - "**/*.md"
+    - "**/*.yaml" 
+    - "**/*.yml"
+    - "petk.config.yaml"
+  ignored:
+    - "**/node_modules/**"
+    - "**/dist/**"
+    - "**/.git/**"
+    - "**/coverage/**"
+    - "**/.petk/cache/**"
+  debounceMs: 300
+  recursive: true
+  followSymlinks: false
+  # Optional advanced settings
+  # depth: 10
+  # pollingInterval: 100
+  # binaryPollingInterval: 300
+
+# RAG (Retrieval Augmented Generation) sources
+rag:
+  sources:
+    - name: "project_docs"
+      type: "directory"
+      path: "./docs"
+      enabled: true
+      patterns: ["**/*.md", "**/*.mdx"]
+    - name: "api_specs"
+      type: "directory" 
+      path: "./api"
+      enabled: false
+      patterns: ["**/*.yaml", "**/*.json"]
+
+# LLM configuration for AI-powered features
+llm:
+  provider: "openai"
+  model: "gpt-4"
+  temperature: 0.7
+  maxTokens: 2000
+  timeout: 30000
+  enabled: false

@@ -2,6 +2,45 @@
 
 <!-- LLM_INSERT_CHANGELOG_HERE -->
 
+## [2025-08-18 17:48:45] CLI: Comprehensive Commander.js implementation with functional command architecture
+
+- **Type:** Added
+- **Docs:** [apps/cli/src/index.ts], [apps/cli/src/types.ts], [apps/cli/src/commands/build-command.ts], [apps/cli/src/commands/convert-command.ts], [apps/cli/src/commands/validate-command.ts], [apps/cli/src/commands/optimize-command.ts], [apps/cli/package.json]
+- **Architecture:** No changes to docs/README.md or documentation structure
+- **Summary:**
+  Implemented comprehensive CLI foundation using Commander.js v14.0.0 with functional programming principles. Created complete command structure with pure function handlers, global options, and stub implementations ready for future engine integration. All commands build and execute successfully with proper option parsing and error handling.
+
+  ### Added
+   - Complete CLI entry point with Commander.js setup and global options (--config, --watch, --vars, --rag)
+   - TypeScript interfaces for all command options and contexts with strict typing
+   - Functional command handlers for build, convert, validate, and optimize operations
+   - Pure function architecture with separate validation, processing, and execution functions
+   - Comprehensive option parsing for each command with specific parameters
+   - Package.json bin entry for CLI executable and proper scripts configuration
+   - Build system integration with monorepo Turborepo setup
+
+  ### Fixed
+   - TypeScript compilation issues with function parameter scoping and return types
+   - Missing @types/node dependency for Node.js globals and process object
+
+  ### Changed
+   - Updated package.json with Commander.js dependency and dev dependencies
+   - Enhanced package scripts with start command for built CLI execution
+
+  ### Restructured
+   - N/A
+
+  ### To-do
+   - Integration with @petk/engine for build command implementation
+   - Integration with @petk/converter for convert command implementation
+   - Validation logic implementation for validate command
+   - Optimization logic implementation for optimize command
+
+  ### WIP
+   - Phase 4 engine integration planning for full CLI functionality
+
+  ----
+
 ## [2025-08-16 23:31:55] Engine: glob pipeline utilities, deterministic shuffle, and expanded tests
 
 - **Type:** Added/Changed/Tested
