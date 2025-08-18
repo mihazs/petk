@@ -2,6 +2,7 @@
 
 import { Command } from 'commander';
 import { GlobalOptions } from './types.js';
+import { validateCommand } from './commands/validate-command.js';
 
 const createProgram = (): Command => {
     const program = new Command();
@@ -81,20 +82,6 @@ const addConvertCommand = (program: Command): Command => {
         });
 };
 
-const addValidateCommand = (program: Command): Command => {
-    return program
-        .command('validate')
-        .description('validate template structure and syntax')
-        .argument('<input>', 'input template file')
-        .option('--redteam', 'enable red team validation', false)
-        .action(async (input: string, options: any) => {
-            const globalOptions = extractGlobalOptions(program.opts());
-            const validateOptions = { ...globalOptions, redteam: options.redteam };
-            
-            console.log('Validate command:', { input, options: validateOptions });
-            console.log('Validation functionality will be implemented in Phase 4');
-        });
-};
 
 const addOptimizeCommand = (program: Command): Command => {
     return program
@@ -123,7 +110,7 @@ const setupCommands = (program: Command): Command => {
     
     addBuildCommand(programWithOptions);
     addConvertCommand(programWithOptions);
-    addValidateCommand(programWithOptions);
+    validateCommand(programWithOptions);
     addOptimizeCommand(programWithOptions);
     
     return programWithOptions;

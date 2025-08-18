@@ -7,8 +7,8 @@ import type {
     ConfigLoadOptions,
     ConfigLoadResult,
     ConfigValidationError
-} from './config-types';
-import { DEFAULT_CONFIG } from './config-types';
+} from './config-types.js';
+import { DEFAULT_CONFIG } from './config-types.js';
 
 const mergeConfigurations = (defaultConfig: PetkConfig, loadedConfig: Partial<PetkConfig>): PetkConfig => {
     const templateConfig = {
