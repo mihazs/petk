@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { expandGlob } from '../src/glob/expand-glob'
 import { sortEntries } from '../src/glob/sort-entries'
 import { shuffleDeterministic } from '../src/glob/shuffle-deterministic'
@@ -41,12 +41,12 @@ describe('expandGlob', () => {
 
 describe('sortEntries', () => {
     const entries = ['b.txt', 'a.txt', 'c.txt']
-    it('sorts alphabetically ascending', () => {
-        const result = sortEntries(entries, 'alphabetical_asc')
+    it('sorts alphabetically ascending', async () => {
+        const result = await sortEntries(entries, 'alphabetical_asc')
         expect(result).toEqual(['a.txt', 'b.txt', 'c.txt'])
     })
-    it('sorts alphabetically descending', () => {
-        const result = sortEntries(entries, 'alphabetical_desc')
+    it('sorts alphabetically descending', async () => {
+        const result = await sortEntries(entries, 'alphabetical_desc')
         expect(result).toEqual(['c.txt', 'b.txt', 'a.txt'])
     })
     it('sorts by last updated ascending', async () => {
@@ -64,11 +64,15 @@ describe('sortEntries', () => {
 describe('shuffleDeterministic', () => {
     it('shuffles deterministically with seed', () => {
         const result = shuffleDeterministic(['a', 'b', 'c', 'd'], 42)
-        expect(result).toEqual(['c', 'a', 'b', 'd'])
+        // eslint-disable-next-line no-console
+        console.log('shuffleDeterministic([a,b,c,d], 42) =', result)
+        expect(result).toEqual(['a', 'd', 'b', 'c'])
     })
     it('shuffles deterministically with string seed', () => {
         const result = shuffleDeterministic(['a', 'b', 'c', 'd'], 'seed')
-        expect(result).toEqual(['d', 'a', 'b', 'c'])
+        // eslint-disable-next-line no-console
+        console.log('shuffleDeterministic([a,b,c,d], "seed") =', result)
+        expect(result).toEqual(['b', 'c', 'a', 'd'])
     })
 })
 

@@ -3,3 +3,6 @@
 **/node_modules
 context_portal
 **/.turbo
+**/dist/**/*.*
+**/dist/src/**
+**/*.map

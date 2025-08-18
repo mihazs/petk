@@ -2,12 +2,31 @@ import type { Directive } from './types';
 import { findDirectiveBlocks } from './block-extractor';
 import { parseDirective } from './parse-directive';
 
+function convertLineRangeToCharRange(input: string, lineStart: number, lineEnd: number): { start: number; end: number } {
+    const lines = input.split(/\r?\n/);
+    let charStart = 0;
+    
+    // Calculate character position at start of lineStart
+    for (let i = 0; i < lineStart; i++) {
+        charStart += lines[i].length + 1; // +1 for newline
+    }
+    
+    // Calculate character position at end of lineEnd (including the newline)
+    let charEnd = charStart;
+    for (let i = lineStart; i <= lineEnd; i++) {
+        charEnd += lines[i].length + (i < lines.length - 1 ? 1 : 0); // +1 for newline except last line
+    }
+    
+    return { start: charStart, end: charEnd };
+}
+
 export function parseAll(input: string): Directive[] {
     const blocks = findDirectiveBlocks(input).map(block => {
         const directive = parseDirective(block.yaml, block.type);
+        const charRange = convertLineRangeToCharRange(input, block.start, block.end);
         return {
             ...directive,
-            range: { start: block.start, end: block.end },
+            range: { start: charRange.start, end: charRange.end },
             raw: block.raw,
         };
     });

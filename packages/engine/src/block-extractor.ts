@@ -47,9 +47,16 @@ export function findDirectiveBlocks(input: string): Block[] {
             if (line.trim() === '```') {
                 inFence = false;
                 rawLines.push(line);
+                const extractedYaml = yamlLines.join('\n');
+                // eslint-disable-next-line no-console
+                console.log('[petk-debug] [block-extractor] extracted yaml for', type, ':', JSON.stringify(extractedYaml));
+                if (type === 'include') {
+                    // eslint-disable-next-line no-console
+                    console.log('[petk-debug] [block-extractor] extracted raw for include:', JSON.stringify(rawLines.join('\n')));
+                }
                 blocks.push({
                     type: type!,
-                    yaml: yamlLines.join('\n'),
+                    yaml: extractedYaml,
                     start,
                     end: i,
                     raw: rawLines.join('\n'),

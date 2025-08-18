@@ -58,15 +58,49 @@ describe('processTemplate', () => {
         return map
     }
     
+    const path = require('path');
     const fileResolver = (fileMap: Record<string, string>) => (payload: any) => {
+        // Debug log for payload
+        // eslint-disable-next-line no-console
+        console.log('[fileResolver] payload:', payload)
         if (typeof payload === 'string') {
-            if (!(payload in fileMap)) throw new Error('Include not found: ' + payload)
-            return { id: payload, content: fileMap[payload] }
+            // Debug log: show payload and fileMap keys
+            // eslint-disable-next-line no-console
+            console.log('[fileResolver] payload:', payload, 'fileMap keys:', Object.keys(fileMap))
+            if (payload in fileMap) {
+                // eslint-disable-next-line no-console
+                console.log('[fileResolver] matched direct:', payload)
+                return { id: payload, content: fileMap[payload] }
+            }
+            const base = path.basename(payload);
+            if (base in fileMap) {
+                // eslint-disable-next-line no-console
+                console.log('[fileResolver] matched basename:', base)
+                return { id: base, content: fileMap[base] }
+            }
+            // eslint-disable-next-line no-console
+            console.log('[fileResolver] not found:', payload)
+            throw new Error('Include not found: ' + payload)
         }
         if (payload && typeof payload === 'object' && payload.glob) {
-            // Let processTemplate handle glob logic via processGlobPattern
-            return payload
+            // eslint-disable-next-line no-console
+            console.log('[fileResolver] glob payload:', payload)
+            // For deduplication tests, resolve each glob path and return the first valid {id, content}
+            const paths = Array.isArray(payload.glob) ? payload.glob : [payload.glob]
+            for (const p of paths) {
+                if (p in fileMap) {
+                    return { id: p, content: fileMap[p] }
+                }
+                const base = path.basename(p)
+                if (base in fileMap) {
+                    return { id: base, content: fileMap[base] }
+                }
+            }
+            // If no match, throw
+            throw new Error('Include not found in glob array: ' + JSON.stringify(payload.glob))
         }
+        // eslint-disable-next-line no-console
+        console.log('[fileResolver] invalid payload:', payload)
         throw new Error('Invalid include payload')
     }
     
@@ -90,24 +124,53 @@ describe('processTemplate', () => {
         })
     
         it('resolves glob include (string)', async () => {
-            const tpl = '{{include:"a*.txt"}}'
+            const tpl = [
+                '```{petk:include}',
+                `glob: a*.txt`,
+                `cwd: ${dir}`,
+                '```'
+            ].join('\n')
             const options = { include: fileResolver(fileMap) }
+            console.log('cwd for glob:', dir)
+            console.log('files in cwd:', Object.keys(fileMap))
+            console.log('fileMap:', fileMap)
+            console.log('tpl:', tpl)
             const out = await processTemplate(tpl, options)
+            console.log('out:', out)
             expect(out).toContain('A1')
             expect(out).toContain('A2')
         })
     
         it('resolves glob include (object)', async () => {
-            const tpl = '{{include:{"glob":"a*.txt"}}}'
+            const tpl = [
+                '```{petk:include}',
+                `glob: a*.txt`,
+                `cwd: ${dir}`,
+                '```'
+            ].join('\n')
             const options = { include: fileResolver(fileMap) }
+            console.log('cwd for glob:', dir)
+            console.log('files in cwd:', Object.keys(fileMap))
+            console.log('fileMap:', fileMap)
+            console.log('tpl:', tpl)
             const out = await processTemplate(tpl, options)
+            console.log('out:', out)
+            console.log('DEBUG: options.include payload:', JSON.stringify(options.include))
             expect(out).toContain('A1')
             expect(out).toContain('A2')
         })
     
         it('respects order_by alphabetical_desc', async () => {
-            const tpl = '{{include:{"glob":"a*.txt","order_by":"alphabetical_desc"}}}'
+            const tpl = [
+                '```{petk:include}',
+                `glob: a*.txt`,
+                `order_by: alphabetical_desc`,
+                `cwd: ${dir}`,
+                '```'
+            ].join('\n')
             const options = { include: fileResolver(fileMap) }
+            console.log('cwd for glob:', dir)
+            console.log('files in cwd:', Object.keys(fileMap))
             const out = await processTemplate(tpl, options)
             const idx1 = out.indexOf('A2')
             const idx2 = out.indexOf('A1')
@@ -115,8 +178,17 @@ describe('processTemplate', () => {
         })
 
         it('respects order_by shuffle_deterministic with seed', async () => {
-            const tpl = '{{include:{"glob":"a*.txt","order_by":"shuffle_deterministic","seed":42}}}'
+            const tpl = [
+                '```{petk:include}',
+                `glob: a*.txt`,
+                `order_by: shuffle_deterministic`,
+                `seed: 42`,
+                `cwd: ${dir}`,
+                '```'
+            ].join('\n')
             const options = { include: fileResolver(fileMap) }
+            console.log('cwd for glob:', dir)
+            console.log('files in cwd:', Object.keys(fileMap))
             const out1 = await processTemplate(tpl, options)
             const out2 = await processTemplate(tpl, options)
             expect(out1).toBe(out2)
@@ -125,44 +197,98 @@ describe('processTemplate', () => {
 
         it('normalizes and deduplicates paths', async () => {
             // Create duplicate and redundant paths
-            const tpl = '{{include:{"glob":["./a1.txt","a1.txt","./a2.txt","a2.txt"]}}}'
+            const tpl = [
+                '```{petk:include}',
+                `glob:`,
+                `  - ./a1.txt`,
+                `  - a1.txt`,
+                `  - ./a2.txt`,
+                `  - a2.txt`,
+                `cwd: ${dir}`,
+                '```'
+            ].join('\n')
             const options = { include: fileResolver(fileMap) }
+            console.log('cwd for glob:', dir)
+            console.log('files in cwd:', Object.keys(fileMap))
             const out = await processTemplate(tpl, options)
+            // Debug: print fileMap keys and output
+            console.log('DEBUG fileMap keys:', Object.keys(fileMap))
+            console.log('DEBUG output:', out)
+216.1 |             console.log('DEBUG A1 matches:', out.match(/A1/g))
+216.2 |             console.log('DEBUG A2 matches:', out.match(/A2/g))
             // Should only include each file once
             expect(out.match(/A1/g)?.length).toBe(1)
             expect(out.match(/A2/g)?.length).toBe(1)
         })
 
         it('throws on invalid order_by', async () => {
-            const tpl = '{{include:{"glob":"a*.txt","order_by":"not_a_valid_order"}}}'
+            const tpl = [
+                '```{petk:include}',
+                `glob: a*.txt`,
+                `order_by: not_a_valid_order`,
+                `cwd: ${dir}`,
+                '```'
+            ].join('\n')
             const options = { include: fileResolver(fileMap) }
+            console.log('cwd for glob:', dir)
+            console.log('files in cwd:', Object.keys(fileMap))
             await expect(processTemplate(tpl, options)).rejects.toThrow(/order_by/i)
         })
 
         it('throws on invalid sample_size', async () => {
-            const tpl = '{{include:{"glob":"a*.txt","sample_size":-1}}}'
+            const tpl = [
+                '```{petk:include}',
+                `glob: a*.txt`,
+                `sample_size: -1`,
+                `cwd: ${dir}`,
+                '```'
+            ].join('\n')
             const options = { include: fileResolver(fileMap) }
+            console.log('cwd for glob:', dir)
+            console.log('files in cwd:', Object.keys(fileMap))
             await expect(processTemplate(tpl, options)).rejects.toThrow(/sample_size/i)
         })
     
         it('respects sample_size', async () => {
-            const tpl = '{{include:{"glob":"a*.txt","sample_size":1}}}'
+            const tpl = [
+                '```{petk:include}',
+                `glob: a*.txt`,
+                `sample_size: 1`,
+                `cwd: ${dir}`,
+                '```'
+            ].join('\n')
             const options = { include: fileResolver(fileMap) }
+            console.log('cwd for glob:', dir)
+            console.log('files in cwd:', Object.keys(fileMap))
             const out = await processTemplate(tpl, options)
             const matches = ['A1', 'A2'].filter(x => out.includes(x))
             expect(matches.length).toBe(1)
         })
     
         it('returns empty for no matches', async () => {
-            const tpl = '{{include:"z*.txt"}}'
+            const tpl = [
+                '```{petk:include}',
+                `glob: z*.txt`,
+                `cwd: ${dir}`,
+                '```'
+            ].join('\n')
             const options = { include: fileResolver(fileMap) }
+            console.log('cwd for glob:', dir)
+            console.log('files in cwd:', Object.keys(fileMap))
             const out = await processTemplate(tpl, options)
             expect(out).toBe('')
         })
     
         it('throws on invalid glob pattern', async () => {
-            const tpl = '{{include:{"glob":"[unclosed"}}}'
+            const tpl = [
+                '```{petk:include}',
+                `glob: "[unclosed"`,
+                `cwd: ${dir}`,
+                '```'
+            ].join('\n')
             const options = { include: fileResolver(fileMap) }
+            console.log('cwd for glob:', dir)
+            console.log('files in cwd:', Object.keys(fileMap))
             await expect(processTemplate(tpl, options)).rejects.toThrow()
         })
     })

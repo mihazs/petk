@@ -10,10 +10,13 @@ export function parseDirective(yaml: string, type: DirectiveType): Directive {
     }
 
     if (type === 'include') {
-        if (!data || typeof data.path !== 'string') {
-            throw new Error('Invalid include directive: missing or invalid path');
+        if (data && typeof data.path === 'string') {
+            return { type, path: data.path };
         }
-        return { type, path: data.path };
+        if (data && (typeof data.glob === 'string' || Array.isArray(data.glob))) {
+            return { type, ...data };
+        }
+        throw new Error('Invalid include directive: missing or invalid path or glob');
     }
     if (type === 'var') {
         if (!data || typeof data.name !== 'string' || !('value' in data)) {
