@@ -1,17 +1,16 @@
-import { marked, Token, MarkedOptions, TokenizerObject, Tokens } from 'marked';
+import { marked, Token, MarkedOptions } from 'marked';
 import { Result, createSuccess, createFailure, createMarkdownParseError } from '../types/error-types.js';
-import { 
-    ConversionOptions, 
-    PipelineMetadata, 
+import {
+    ConversionOptions,
+    PipelineMetadata,
     SourcePosition,
-    shouldPreserveSourcePositions,
-    addWarning
+    shouldPreserveSourcePositions
 } from '../types/pipeline-types.js';
 
 export function parseMarkdownToTokens(
-    markdown: string, 
-    options: ConversionOptions, 
-    metadata: PipelineMetadata
+    markdown: string,
+    options: ConversionOptions,
+    _metadata: PipelineMetadata
 ): Result<readonly Token[], import('../types/error-types.js').MarkdownParseError> {
     try {
         validateMarkdownInput(markdown, options);
@@ -28,7 +27,7 @@ export function parseMarkdownToTokens(
     }
 }
 
-function validateMarkdownInput(markdown: string, options: ConversionOptions): void {
+function validateMarkdownInput(markdown: string, _options: ConversionOptions): void {
     if (typeof markdown !== 'string') {
         throw new Error('Markdown input must be a string');
     }
@@ -241,7 +240,7 @@ function createParseError(
     );
 }
 
-function extractErrorContext(markdown: string, errorMessage: string): string {
+function extractErrorContext(markdown: string, _errorMessage: string): string {
     if (typeof markdown !== 'string' || markdown === null) {
         return 'Invalid markdown input';
     }
@@ -271,7 +270,7 @@ export function isMarkdownParseError(error: unknown): error is import('../types/
            error.type === 'markdown_parse_error';
 }
 
-export function validateMarkdownSize(markdown: string, maxSizeMB: number = 50): boolean {
+export function validateMarkdownSize(markdown: string, maxSizeMB = 50): boolean {
     const maxBytes = maxSizeMB * 1024 * 1024;
     return Buffer.byteLength(markdown, 'utf8') <= maxBytes;
 }
@@ -283,8 +282,8 @@ export function getMarkdownStats(markdown: string): MarkdownStats {
     const bytes = Buffer.byteLength(markdown, 'utf8');
     
     const headingMatches = markdown.match(/^#+\s/gm) || [];
-    // Match links but exclude images (links not preceded by !)
-    const linkMatches = markdown.match(/(?<!\!)\[([^\]]*)\]\(([^)]*)\)/g) || [];
+    // Match standard markdown links: [text](url) but exclude images: ![text](url)
+    const linkMatches = markdown.match(/(?<!!)\[([^\]]*)\]\(([^)]+)\)/g) || [];
     const imageMatches = markdown.match(/!\[.*?\]\(.*?\)/g) || [];
     const codeBlockMatches = markdown.match(/```[\s\S]*?```/g) || [];
     

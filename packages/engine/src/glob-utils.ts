@@ -1,4 +1,5 @@
 import { glob } from 'glob';
+import { join } from 'path';
 
 type OrderBy = 'alphabetical_asc' | 'alphabetical_desc' | 'last_updated_asc' | 'last_updated_desc' | undefined;
 
@@ -13,14 +14,11 @@ export type GlobOptions = {
 const compareAlphabeticalAsc = (a: string, b: string) => a.localeCompare(b);
 const compareAlphabeticalDesc = (a: string, b: string) => b.localeCompare(a);
 
-const compareLastUpdatedAsc = (a: string, b: string) => 0;
-const compareLastUpdatedDesc = (a: string, b: string) => 0;
-
 const getFileStats = async (paths: string[], cwd?: string) => {
     const { stat } = await import('fs/promises');
     return Promise.all(
         paths.map(async (p) => {
-            const fullPath = cwd ? require('path').join(cwd, p) : p;
+            const fullPath = cwd ? join(cwd, p) : p;
             const stats = await stat(fullPath);
             return { path: p, mtime: stats.mtimeMs };
         })

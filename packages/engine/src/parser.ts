@@ -33,7 +33,7 @@ export function parseAll(input: string): Directive[] {
 
     // Add support for short-form directives: {{include:id}} and {{var:key}}
     const shortForm: Directive[] = [];
-    const regex = /\{\{(include|var):([^\}]+)\}\}/g;
+    const regex = /\{\{(include|var):([^}]+)\}\}/g;
     let match: RegExpExecArray | null;
     while ((match = regex.exec(input))) {
         const [raw, type, value] = match;

@@ -4,7 +4,7 @@ export function normalizePaths(paths: readonly string[]): readonly string[] {
     const seen = new Set<string>()
     const result: string[] = []
     for (const p of paths) {
-        let normalized = normalizePath(p)
+        const normalized = normalizePath(p)
         if (!seen.has(normalized)) {
             seen.add(normalized)
             result.push(p)

@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { parseDirective } from '../src/parse-directive';
-import type { Directive } from '../src/types';
 
 describe('parseDirective', () => {
     it('parses a valid include directive', () => {
@@ -44,7 +43,7 @@ describe('parseDirective', () => {
 
     it('throws on invalid directive type', () => {
         const yaml = 'foo: bar';
-        // @ts-expect-error
+        // @ts-expect-error - Testing with invalid directive type to verify error handling
         expect(() => parseDirective(yaml, 'unknown')).toThrow(/Invalid directive type/i);
     });
 

@@ -27,9 +27,9 @@ beforeAll(() => {
 
 afterAll(() => {
     fileNames.forEach((name) => {
-        try { unlinkSync(join(TMP_DIR, name)) } catch {}
+        try { unlinkSync(join(TMP_DIR, name)) } catch { /* ignore cleanup errors */ }
     })
-    try { rmdirSync(TMP_DIR) } catch {}
+    try { rmdirSync(TMP_DIR) } catch { /* ignore cleanup errors */ }
 })
 
 describe('expandGlob', () => {
@@ -51,12 +51,12 @@ describe('sortEntries', () => {
     })
     it('sorts by last updated ascending', async () => {
         const mtimes = { 'a.txt': 1000, 'b.txt': 2000, 'c.txt': 1500 }
-        const result = await sortEntries(entries, 'last_updated_asc', { statMany: async (paths) => mtimes })
+        const result = await sortEntries(entries, 'last_updated_asc', { statMany: async (_paths) => mtimes })
         expect(result).toEqual(['a.txt', 'c.txt', 'b.txt'])
     })
     it('sorts by last updated descending', async () => {
         const mtimes = { 'a.txt': 1000, 'b.txt': 2000, 'c.txt': 1500 }
-        const result = await sortEntries(entries, 'last_updated_desc', { statMany: async (paths) => mtimes })
+        const result = await sortEntries(entries, 'last_updated_desc', { statMany: async (_paths) => mtimes })
         expect(result).toEqual(['b.txt', 'c.txt', 'a.txt'])
     })
 })
@@ -83,7 +83,7 @@ describe('sampleEntries', () => {
         expect(result).toEqual(['a', 'b'])
     })
     it('samples random with deterministic rng', () => {
-        const rng = (i: number) => 0.5
+        const rng = (_i: number) => 0.5
         const result = sampleEntries(items, 2, 'random', { rng })
         expect(result.length).toBe(2)
         expect(new Set(result).size).toBe(2)

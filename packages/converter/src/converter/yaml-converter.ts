@@ -1,8 +1,6 @@
 import { dump } from 'js-yaml';
 import type {
     ContentItem,
-    ConversionError,
-    ConversionOptions,
     ParagraphItem,
     HeadingItem,
     ImageItem,
@@ -12,8 +10,7 @@ import type {
     CodeBlockItem,
     TableItem,
     BlockquoteItem,
-    LinkItem,
-    HorizontalRuleItem
+    LinkItem
 } from '../types.js';
 
 export interface YamlConversionOptions {
