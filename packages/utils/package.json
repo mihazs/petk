@@ -15,8 +15,13 @@
         "build": "swc src -d dist --source-maps",
         "test": "vitest run",
         "lint": "eslint ."
-      },
-      "dependencies": {
+    },
+    "dependencies": {
         "js-yaml": "^4.1.0"
-      }
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^8.40.0",
+        "@typescript-eslint/parser": "^8.40.0",
+        "eslint-config-prettier": "^10.1.8"
     }
+}

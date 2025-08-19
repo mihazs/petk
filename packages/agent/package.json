@@ -1,18 +1,23 @@
 {
-    "name": "@petk/agent",
-    "version": "0.1.0",
-    "private": false,
-    "type": "module",
-    "main": "dist/index.js",
-    "module": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "scripts": {
-        "dev": "tsx --watch src/index.ts",
-        "build": "swc src -d dist --source-maps",
-        "test": "vitest run",
-        "lint": "eslint ."
-      },
-      "devDependencies": {
-        "vitest": "^3.2.4"
-      }
+  "name": "@petk/agent",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "tsx --watch src/index.ts",
+    "build": "swc src -d dist --source-maps",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@petk/eslint-config-custom": "workspace:*",
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "vitest": "^3.2.4"
+  }
 }

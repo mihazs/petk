@@ -15,20 +15,20 @@ This file is the living source of truth for the documentation architecture of th
 
 ### Category Definitions
 
-- **learning/**  
-  *Purpose:* Step-by-step guides and tutorials for onboarding and learning core workflows.  
+- **learning/**
+  *Purpose:* Step-by-step guides and tutorials for onboarding and learning core workflows.
   *Examples:* "Getting Started", "First CLI Usage", "How to Add a Utility Function".
 
-- **problems/**  
-  *Purpose:* Problem-solving guides for specific user goals or issues.  
-  *Examples:* "How to fix TypeScript errors", "Troubleshooting CLI installation".
+- **problems/**
+  *Purpose:* Problem-solving guides for specific user goals or issues.
+  *Examples:* "How to fix TypeScript errors", "Troubleshooting CLI installation", "ESLint Setup Issues".
 
-- **reference/**  
-  *Purpose:* Information-oriented technical reference for APIs, configuration, and commands.  
-  *Examples:* "CLI Command Reference", "Configuration Options", "Utility Function Index".
+- **reference/**
+  *Purpose:* Information-oriented technical reference for APIs, configuration, and commands.
+  *Examples:* "CLI Command Reference", "Configuration Options", "Utility Function Index", "ESLint Configuration Reference".
 
-- **explanation/**  
-  *Purpose:* Understanding-oriented documentation for concepts, architecture, and decisions.  
+- **explanation/**
+  *Purpose:* Understanding-oriented documentation for concepts, architecture, and decisions.
   *Examples:* "Why Functional Programming?", "Monorepo Structure Rationale".
 
 ### Evolution Guidelines

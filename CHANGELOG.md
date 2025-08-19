@@ -2,6 +2,52 @@
 
 <!-- LLM_INSERT_CHANGELOG_HERE -->
 
+## [2025-08-19 01:55:58] ESLint Configuration Setup and Documentation
+
+- **Type:** Added/Fixed
+- **Docs:** docs/reference/eslint-configuration.md, docs/problems/eslint-setup-issues.md, docs/README.md
+- **Architecture:** Updated docs/README.md to include ESLint-specific documentation examples
+- **Summary:**
+  Complete ESLint configuration setup for the Petk monorepo with TypeScript support, shared configuration architecture, and comprehensive documentation. Resolved dependency resolution issues in pnpm workspaces and created both technical reference and troubleshooting documentation.
+  
+  ### Added
+   - Complete ESLint configuration for TypeScript monorepo with shared config architecture
+   - Root-level TypeScript ESLint dependencies (@typescript-eslint/parser, @typescript-eslint/eslint-plugin)
+   - Shared ESLint configuration package (packages/eslint-config-custom) with proper peerDependencies
+   - Individual package ESLint configurations extending shared config
+   - Comprehensive technical reference documentation (docs/reference/eslint-configuration.md)
+   - Problem-solving troubleshooting guide (docs/problems/eslint-setup-issues.md)
+   - Documentation structure expansion in docs/README.md for ESLint content
+
+  ### Fixed
+   - ESLint dependency resolution issues in pnpm monorepo workspace
+   - TypeScript parser configuration and project references
+   - Shared configuration package structure and dependency management
+   - ESLint configuration inheritance across monorepo packages
+   - Integration with Prettier to prevent rule conflicts
+   - Turborepo integration for linting pipeline
+
+  ### Changed
+   - Updated root .eslintrc.json with proper TypeScript support and parser options
+   - Modified shared config package to use peerDependencies approach for better dependency resolution
+   - Enhanced individual package configurations to properly extend shared config
+   - Improved documentation architecture to accommodate ESLint setup guidance
+
+  ### Configuration Architecture
+   - Root-level ESLint configuration with TypeScript parser and Prettier integration
+   - Shared configuration package with explicit rule definitions and environment settings
+   - Package-level configurations extending shared config with minimal overhead
+   - Consistent linting scripts across all packages for Turborepo integration
+   - Proper ignore patterns for build outputs and node_modules
+
+  ### Documentation Structure
+   - Technical reference documentation for configuration structure and dependencies
+   - Problem-solving guide with common issues and step-by-step solutions
+   - Diagnostic commands and troubleshooting procedures
+   - Integration guidance for Prettier, TypeScript, and Turborepo
+
+   ----
+
 ## [2025-08-19 04:24:15] Docusaurus Documentation Site Implementation
 
 - **Type:** Added
