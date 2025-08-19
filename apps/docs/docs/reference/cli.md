@@ -48,7 +48,7 @@ petk process [options] <input> [output]
 
 **Template Engine Features:**
 - **Variable Substitution**: Replace `{{variable}}` with values from config or CLI
-- **Include Blocks**: Embed content from other files using `<!--{ include: "path/to/file.md" }-->`
+- **Include Blocks**: Embed content from other files using code blocks with `{petk:include}` directive
 - **Conditional Blocks**: Show/hide content based on conditions
 - **Loop Blocks**: Repeat content for arrays of data
 - **Advanced Glob Patterns**: Complex file inclusion with sorting options
@@ -227,20 +227,26 @@ This site is hosted at {{site.url}}.
 **File Inclusion:**
 ```markdown
 <!-- Include entire file -->
-<!--{ include: "shared/header.md" }-->
+```{petk:include}
+path: shared/header.md
+```
 
 <!-- Include with variables -->
-<!--{ include: "templates/card.md", title: "My Card", content: "Card content" }-->
+```{petk:include}
+path: templates/card.md
+title: My Card
+content: Card content
+```
 ```
 
 **Complex Glob Patterns:**
 ```markdown
 <!-- Include all markdown files, sorted by last modified -->
-<!--{ 
-  include: "posts/**/*.md",
-  order_by: "last_updated_desc",
-  limit: 10
-}-->
+```{petk:include}
+glob: posts/**/*.md
+order_by: last_updated_desc
+limit: 10
+```
 ```
 
 ### Conversion Examples

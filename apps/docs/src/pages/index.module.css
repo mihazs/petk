@@ -1,23 +1,391 @@
 /**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
+ * CSS modules for the Petk homepage
+ * Implements TypeScript blue theme with responsive design
  */
 
+/* Hero Section */
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+    background: linear-gradient(135deg, #007ACC 0%, #005a99 100%);
+    color: white;
+    padding: 4rem 0 6rem 0;
+    position: relative;
+    overflow: hidden;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
+.heroBanner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23ffffff" stroke-width="0.1" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+}
+
+.heroContent {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.heroTitle {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.heroSubtitle {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+    line-height: 1.6;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.heroButtons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.heroCode {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.codeBlock {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    flex: 1;
+    max-width: 400px;
+}
+
+.codeHeader {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px 8px 0 0;
+}
+
+.codeContent {
+    padding: 1rem;
+    font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.95);
+    background: none;
+    margin: 0;
+    overflow-x: auto;
+}
+
+.arrow {
+    font-size: 2rem;
+    font-weight: bold;
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+
+/* Why Section */
+.whySection {
+    padding: 5rem 0;
+    background: var(--ifm-background-color);
+}
+
+.sectionTitle {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #007ACC;
+}
+
+.whyContent {
+    font-size: 1.125rem;
+    line-height: 1.7;
+}
+
+.whyContent p {
+    margin-bottom: 1.5rem;
+}
+
+/* Features Section */
+.featuresSection {
+    padding: 5rem 0;
+    background: var(--ifm-background-surface-color);
+}
+
+.featureCard {
+    display: flex;
+    gap: 1rem;
     padding: 2rem;
-  }
+    background: var(--ifm-background-color);
+    border: 1px solid var(--ifm-color-emphasis-200);
+    border-radius: 12px;
+    height: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 2rem;
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.featureCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 122, 204, 0.1);
+    border-color: #007ACC;
+}
+
+.featureIcon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.featureContent {
+    flex: 1;
+}
+
+.featureTitle {
+    font-size: 1.375rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #007ACC;
+}
+
+.featureDescription {
+    color: var(--ifm-color-emphasis-700);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Installation Section */
+.installSection {
+    padding: 5rem 0;
+    background: var(--ifm-background-color);
+}
+
+.installOptions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.installOption h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #007ACC;
+}
+
+.installOption .codeBlock {
+    background: var(--ifm-color-emphasis-100);
+    border: 1px solid var(--ifm-color-emphasis-300);
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+}
+
+.installOption .codeContent {
+    padding: 0.75rem 1rem;
+    font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: var(--ifm-color-emphasis-800);
+    background: none;
+    margin: 0;
+}
+
+.quickStart {
+    margin-top: 2rem;
+}
+
+.quickStart h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #007ACC;
+}
+
+.quickStart .codeBlock {
+    background: var(--ifm-color-emphasis-100);
+    border: 1px solid var(--ifm-color-emphasis-300);
+    border-radius: 6px;
+}
+
+.quickStart .codeContent {
+    padding: 1rem;
+    font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: var(--ifm-color-emphasis-800);
+    background: none;
+    margin: 0;
+    white-space: pre;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 996px) {
+    .heroBanner {
+        padding: 3rem 0 4rem 0;
+    }
+    
+    .heroTitle {
+        font-size: 2.5rem;
+    }
+    
+    .heroSubtitle {
+        font-size: 1.125rem;
+    }
+    
+    .heroCode {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .arrow {
+        transform: rotate(90deg);
+    }
+    
+    .installOptions {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .sectionTitle {
+        font-size: 2rem;
+    }
+    
+    .featureCard {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .heroBanner {
+        padding: 2rem 0 3rem 0;
+    }
+    
+    .heroTitle {
+        font-size: 2rem;
+    }
+    
+    .heroSubtitle {
+        font-size: 1rem;
+    }
+    
+    .heroButtons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .heroButtons .button {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .whySection,
+    .featuresSection,
+    .installSection {
+        padding: 3rem 0;
+    }
+    
+    .featureCard {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .featureIcon {
+        align-self: center;
+    }
+    
+    .sectionTitle {
+        font-size: 1.75rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .heroTitle {
+        font-size: 1.75rem;
+    }
+    
+    .heroSubtitle {
+        font-size: 0.9rem;
+        padding: 0 1rem;
+    }
+    
+    .codeContent {
+        font-size: 0.75rem;
+        padding: 0.75rem;
+    }
+    
+    .heroCode .codeContent {
+        font-size: 0.75rem;
+        padding: 0.75rem;
+    }
+}
+
+/* Accessibility improvements */
+.featureCard:focus-within {
+    outline: 2px solid #007ACC;
+    outline-offset: 2px;
+}
+
+.heroButtons .button:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+/* Dark mode adjustments */
+[data-theme='dark'] .installOption .codeBlock,
+[data-theme='dark'] .quickStart .codeBlock {
+    background: var(--ifm-background-surface-color);
+    border-color: var(--ifm-color-emphasis-300);
+}
+
+[data-theme='dark'] .installOption .codeContent,
+[data-theme='dark'] .quickStart .codeContent {
+    color: var(--ifm-color-emphasis-800);
+}
+
+[data-theme='dark'] .featureCard {
+    background: var(--ifm-background-surface-color);
+    border-color: var(--ifm-color-emphasis-300);
+}
+
+/* Button customization for TypeScript theme */
+.heroButtons .button--primary {
+    background-color: #ffffff;
+    color: #007ACC;
+    border-color: #ffffff;
+    font-weight: 600;
+}
+
+.heroButtons .button--primary:hover {
+    background-color: #f0f0f0;
+    color: #005a99;
+}
+
+.heroButtons .button--secondary {
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+}
+
+.heroButtons .button--secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
 }

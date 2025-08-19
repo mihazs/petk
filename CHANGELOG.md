@@ -2,6 +2,83 @@
 
 <!-- LLM_INSERT_CHANGELOG_HERE -->
 
+## [2025-08-19 19:23:30] Complete Docusaurus Homepage Implementation with SEO Optimization
+
+- **Type:** Added/Fixed
+- **Docs:** apps/docs/src/pages/index.tsx, apps/docs/src/pages/index.module.css, apps/docs/docusaurus.config.ts
+- **Architecture:** No changes made to docs/README.md or documentation structure
+- **Summary:**
+  Complete implementation of an attractive, SEO-optimized Docusaurus homepage for Petk toolkit with comprehensive content, TypeScript blue theme, and successful build validation. Fixed Docusaurus configuration issues and implemented all required homepage sections including hero, motivation, features, installation, and call-to-action elements.
+
+  ### Added
+   - Complete homepage implementation with hero section featuring compelling tagline "Transform Markdown Templates into Dynamic Content"
+   - "Why use Petk?" motivation section with 2-paragraph explanation covering prompt engineering, documentation automation, and content generation
+   - Four key feature cards: Template Processing, Markdown-to-YAML Conversion, Advanced File Inclusion, and Watch Mode
+   - Quick usage examples showing real petk CLI commands (build, watch, convert)
+   - Installation guide supporting npm, pnpm, and yarn with accurate package information
+   - Clear call-to-action buttons: "Get Started" and "View Documentation" with proper routing
+   - TypeScript blue (#007ACC) primary color theme implementation
+   - Responsive design with mobile-first approach and accessibility features
+   - Complete CSS module styling with responsive breakpoints and hover effects
+   - Comprehensive SEO optimization including meta tags, Open Graph, Twitter Card, and JSON-LD structured data
+
+  ### Fixed
+   - Docusaurus configuration error preventing build: removed conflicting gtag configuration from themeConfig
+   - Build compilation issues resolved - successful production build completed
+   - Homepage content structure and navigation integration
+   - CSS module implementation with proper responsive design patterns
+
+  ### Changed
+   - Updated Docusaurus site title and tagline to match Petk branding
+   - Enhanced themeConfig with comprehensive SEO metadata
+   - Improved site configuration with proper GitHub Pages deployment settings
+   - Updated homepage styling from default Docusaurus template to custom Petk branding
+
+  ### Verified
+   - Successful production build completed without errors (npm run build)
+   - Homepage renders correctly with all sections and proper styling
+   - Responsive design verified across different screen sizes
+   - SEO metadata properly implemented in head tags and structured data
+   - All CTAs and navigation links function correctly
+   - TypeScript compilation successful with no errors
+
+  **Technical Implementation:** Built comprehensive homepage using React/TypeScript with Docusaurus v3.x, implementing modern responsive design patterns, accessibility features (WCAG AA compliance), and complete SEO optimization including structured data for search engines. Successfully resolved build configuration conflicts and validated production deployment readiness.
+
+  ----
+
+## [2025-08-19 16:12:58] Complete Documentation MDX/SSG Compatibility Fix and CLI Validation
+
+- **Type:** Fixed
+- **Docs:** apps/docs/docs/problems/use-cases.md, apps/docs/docs/reference/template-syntax.md, apps/docs/docs/reference/cli.md, apps/docs/docs/learning/first-template.md
+- **Architecture:** No changes made to docs/README.md or documentation structure
+- **Summary:**
+  Comprehensive fix of MDX/SSG compatibility issues preventing successful Docusaurus builds. Systematically converted literal template tokens from {{...}} to safe code spans and fenced blocks to prevent MDX JavaScript expression parsing errors. Verified all fenced directive syntax uses correct ```{petk:...}``` format and completed full CLI validation testing.
+
+  ### Fixed
+   - Fixed all MDX ReferenceError issues caused by {{...}} tokens being parsed as undefined JavaScript expressions
+   - Converted literal template tokens to backtick-wrapped code spans (`{{variable}}`) for safe MDX rendering
+   - Fixed Docker Compose template examples with proper literal token formatting
+   - Corrected nested fenced code block issues in YAML examples
+   - Fixed all remaining HTML comment include syntax examples to use proper fenced directive blocks
+   - Resolved permission and command name issues during CLI testing (discovered correct 'build' command vs 'process')
+
+  ### Changed
+   - Updated all template variable examples to use safe literal rendering with backticks
+   - Converted all include examples to ```{petk:include} fenced blocks with YAML payload
+   - Enhanced template token safety throughout documentation to prevent SSG parsing conflicts
+   - Improved code block formatting consistency across all documentation files
+
+  ### Verified
+   - Full repository build completed successfully with no MDX/SSG errors
+   - CLI validation confirmed correct fenced directive syntax acceptance
+   - Created test reproduction environment with working petk.config.yaml and templates
+   - Confirmed CLI correctly parses ```{petk:include} syntax and loads configuration
+   - All template tokens now render safely without JavaScript expression parsing errors
+
+  **Technical Resolution:** The core issue was MDX-loader treating {{variable}} sequences as JavaScript expressions during server-side generation, causing ReferenceError when variables were undefined. Solution involved systematic conversion to inline code spans and fenced blocks while preserving fenced directive examples with proper ```{petk:...} syntax.
+
+  ----
+
 ## [2025-08-19 18:12:40] Documentation Template Syntax Hallucination Correction
 
 - **Type:** Fixed

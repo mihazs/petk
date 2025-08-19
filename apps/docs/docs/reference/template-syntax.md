@@ -61,12 +61,10 @@ The most powerful feature for embedding content from other files.
 #### Basic File Inclusion
 
 ```markdown
-<!-- Include entire file -->
 ```{petk:include}
 path: shared/header.md
 ```
 
-<!-- Include file with custom variables -->
 ```{petk:include}
 path: templates/card.md
 title: My Card
@@ -79,20 +77,17 @@ content: Card description
 Include multiple files using glob patterns with sorting and filtering:
 
 ```markdown
-<!-- Include all markdown files, sorted alphabetically -->
 ```{petk:include}
 glob: posts/**/*.md
 order_by: alphabetical_asc
 ```
 
-<!-- Include recent files, sorted by modification date -->
 ```{petk:include}
 glob: blog/**/*.md
 order_by: last_updated_desc
 limit: 5
 ```
 
-<!-- Deterministic sampling with seed -->
 ```{petk:include}
 glob: examples/**/*.md
 order_by: random
@@ -169,13 +164,11 @@ module.exports = {
 The template engine automatically handles nested includes with cycle detection:
 
 ```markdown
-<!-- main.md -->
 # Main Document
 ```{petk:include}
 path: sections/intro.md
 ```
 
-<!-- sections/intro.md -->
 ## Introduction
 ```{petk:include}
 path: shared/welcome.md
@@ -190,18 +183,15 @@ This creates a nested inclusion hierarchy.
 Advanced file selection using glob patterns:
 
 ```markdown
-<!-- Include all markdown files except drafts -->
 ```{petk:include}
 glob: "**/*.md"
 exclude: "**/draft/**"
 ```
 
-<!-- Include specific file types from multiple directories -->
 ```{petk:include}
 glob: "{docs,guides,tutorials}/**/*.{md,mdx}"
 ```
 
-<!-- Include with complex filtering -->
 ```{petk:include}
 glob: "content/**/*.md"
 order_by: "last_updated_desc"
@@ -215,7 +205,6 @@ exclude: "{drafts,archive}/**"
 Generate consistent random selections using seeds:
 
 ```markdown
-<!-- Always selects the same 3 files when seed is consistent -->
 ```{petk:include}
 glob: "examples/**/*.md"
 order_by: "random"
@@ -234,7 +223,6 @@ This is useful for:
 Pass variables to included files for dynamic content:
 
 ```markdown
-<!-- Include with context variables -->
 ```{petk:include}
 path: "templates/feature.md"
 name: "Authentication"
@@ -332,12 +320,10 @@ Referenced in: 'templates/layout.md' at line 10
 ### Glob Pattern Optimization
 
 ```markdown
-<!-- Efficient: Specific patterns -->
 ```{petk:include}
 glob: "docs/api/**/*.md"
 ```
 
-<!-- Less efficient: Overly broad patterns -->
 ```{petk:include}
 glob: "**/**/**/*.md"
 ```
@@ -362,21 +348,19 @@ For large projects:
 ### Documentation Site
 
 ```markdown
-<!-- Site header with dynamic navigation -->
 ```{petk:include}
 path: "shared/header.md"
 title: "{{site.title}}"
 version: "{{version}}"
 ```
 
-# {{page.title}}
+# \{\{page.title\}\}
 
 ```{petk:include}
 glob: "content/**/*.md"
 order_by: "alphabetical_asc"
 ```
 
-<!-- Site footer -->
 ```{petk:include}
 path: "shared/footer.md"
 ```
@@ -432,15 +416,15 @@ limit: 3
 {{/each}}
 ```
 
-```markdown
-<!-- Petk -->
+**Petk equivalent:**
+````markdown
 ```{petk:for}
 user: users
 ```
 - {{user.name}} - {{user.email}}
 ```{petk:endfor}
 ```
-```
+````
 
 ### From Jekyll/Liquid
 
@@ -453,7 +437,6 @@ user: users
 ```
 
 ```markdown
-<!-- Petk -->
 ```{petk:include}
 path: "shared/header.md"
 title: "My Site"

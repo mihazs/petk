@@ -46,7 +46,7 @@ variables:
 ```markdown
 ## Brand Communication Guidelines
 
-Communicate as {{company_name}} with a {{brand_tone}} tone:
+Communicate as `{{company_name}}` with a `{{brand_tone}}` tone:
 
 - Use clear, jargon-free language
 - Show empathy and understanding
@@ -58,7 +58,7 @@ Communicate as {{company_name}} with a {{brand_tone}} tone:
 ```markdown
 # Customer Support Assistant
 
-You are {{company_name}}'s AI customer support representative.
+You are `{{company_name}}`'s AI customer support representative.
 
 ```{petk:include}
 path: ../base/brand-voice.md
@@ -75,8 +75,8 @@ path: ../base/compliance.md
 ```
 
 ## Support Context
-- Available: {{support_hours}}
-- Escalation: {{escalation_contact}}
+- Available: \{\{support_hours\}\}
+- Escalation: `{{escalation_contact}}`
 
 ```{petk:include}
 path: ../contexts/*.md
@@ -140,7 +140,7 @@ path: insights/{{content_type}}-insights.md
 
 ---
 
-*This content was generated using {{company_name}}'s content framework. Last updated: {{timestamp}}*
+*This content was generated using `{{company_name}}`'s content framework. Last updated: `{{timestamp}}`*
 ```
 
 **Social Media Post Generator:**
@@ -341,14 +341,14 @@ rtl: {{is_rtl}}
 path: common/{{language_code}}/header.md
 ```
 
-## {{getting_started_title}}
+## `{{getting_started_title}}`
 
 ```{petk:include}
 path: sections/{{language_code}}/getting-started/*.md
 order_by: step_order_asc
 ```
 
-## {{features_title}}
+## `{{features_title}}`
 
 ```{petk:include}
 path: features/{{language_code}}/*.md
@@ -454,32 +454,32 @@ version: '3.8'
 
 services:
   web:
-    image: {{app_image}}:{{app_version}}
+    image: `{{app_image}}`:`{{app_version}}`
     ports:
       - "{{web_port}}:3000"
     environment:
-      - NODE_ENV={{environment}}
-      - DATABASE_URL={{database_url}}
-      - REDIS_URL={{redis_url}}
+      - NODE_ENV=`{{environment}}`
+      - DATABASE_URL=`{{database_url}}`
+      - REDIS_URL=`{{redis_url}}`
     
 ```{petk:include}
-path: services/{{environment}}/*.yaml
+path: services/`{{environment}}`/*.yaml
 order_by: service_priority
 ```
 
   database:
-    image: postgres:{{postgres_version}}
+    image: postgres:`{{postgres_version}}`
     environment:
-      - POSTGRES_DB={{database_name}}
-      - POSTGRES_PASSWORD={{database_password}}
+      - POSTGRES_DB=`{{database_name}}`
+      - POSTGRES_PASSWORD=`{{database_password}}`
     
 ```{petk:include}
-path: config/{{environment}}/database-config.yaml
+path: config/`{{environment}}`/database-config.yaml
 ```
 
 networks:
   default:
-    name: {{project_name}}-{{environment}}
+    name: `{{project_name}}`-`{{environment}}`
 ```
 
 **Environment-Specific Generation:**

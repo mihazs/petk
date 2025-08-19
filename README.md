@@ -70,18 +70,11 @@ You are a helpful AI assistant specialized in {{domain}}.
 <!--{ include: "tools/*.md", order_by: "alphabetical_asc" }-->
 
 ## Examples
-<!--{
-  include: "examples/{{domain}}/*.md",
-  limit: 3,
-  order_by: "last_updated_desc"
-}-->
-
-<!--{ if: "include_guidelines" }-->
-## Guidelines
-<!--{ include: "guidelines/{{domain}}-guidelines.md" }-->
-<!--{ endif }-->
-
-Now, please help the user with their {{task_type}} task.
+```markdown
+```{petk:include}
+path: shared/header.md
+```
+```
 ```
 
 **2. Process with variables:**
@@ -101,63 +94,101 @@ petk convert final-prompt.md --to yaml --output prompt-config.yaml
 ## 🛠️ Advanced Features
 
 ### Template Syntax Reference
+
+Petk uses a powerful template engine that processes Markdown files with embedded directives. The engine supports variable substitution, file inclusion, conditional logic, loops, and advanced file globbing patterns.
+
+## Basic Syntax
+
+### Variable Substitution
+
+Variables are enclosed in double curly braces and can be simple values or nested objects:
+
 ```markdown
-<!-- Variable substitution -->
-Hello {{user.name}}! Today is {{date.formatted}}.
+# Welcome to {{site.title}}
 
-<!-- File inclusion with options -->
-<!--{
-  include: "components/**/*.md",
-  order_by: "alphabetical_asc",
-  limit: 5,
-  separator: "\n---\n"
-}-->
-
-<!-- Conditional blocks -->
-<!--{ if: "user.premium" }-->
-Premium features are available!
-<!--{ elif: "user.trial" }-->
-Trial features are limited.
-<!--{ else }-->
-Please upgrade to access more features.
-<!--{ endif }-->
-
-<!-- Random sampling with deterministic results -->
-<!--{
-  include: "examples/*.md",
-  order_by: "random",
-  seed: 42,
-  limit: 3
-}-->
+This project is maintained by {{author.name}} ({{author.email}}).
+Current version: {{version}}
 ```
 
-### Configuration Example (`petk.config.yaml`)
-```yaml
-paths:
-  templates: "./prompts"
-  components: "./components"
-  output: "./dist"
+**Configuration Example:**
+```javascript
+// petk.config.js
+module.exports = {
+  engine: {
+    variables: {
+      site: {
+        title: "My Project",
+        url: "https://example.com"
+      },
+      author: {
+        name: "John Doe",
+        email: "john@example.com"
+      },
+      version: "1.0.0"
+    }
+  }
+};
+```
 
-defaults:
-  separator: "\n\n---\n\n"
-  order_by: "alphabetical_asc"
+## Directive Blocks
 
-variables:
-  company: "Acme Corp"
-  version: "1.0.0"
-  
-aliases:
-  tools: "components/tools"
-  examples: "examples/production"
+Directives are embedded in markdown code blocks using YAML syntax:
+
+```markdown
+```{petk:include}
+path: shared/header.md
+```
+```
+
+### Include Directive
+
+The most powerful feature for embedding content from other files.
+
+#### Basic File Inclusion
+
+```markdown
+```{petk:include}
+path: shared/header.md
+```
+
+```{petk:include}
+path: templates/card.md
+title: My Card
+content: Card description
+```
+```
+
+#### Advanced Glob Patterns
+
+Include multiple files using glob patterns with sorting and filtering:
+
+```markdown
+```{petk:include}
+glob: posts/**/*.md
+order_by: alphabetical_asc
+```
+
+```{petk:include}
+glob: blog/**/*.md
+order_by: last_updated_desc
+limit: 5
+```
+
+```{petk:include}
+glob: examples/**/*.md
+order_by: random
+seed: 12345
+limit: 3
+```
 ```
 
 ## 📚 Documentation
 
-- **[Getting Started Guide](https://mihazs.github.io/petk/learning/getting-started)** - Installation and first steps
-- **[Template Syntax Reference](https://mihazs.github.io/petk/reference/template-syntax)** - Complete syntax documentation
-- **[CLI Reference](https://mihazs.github.io/petk/reference/cli)** - All commands and options
-- **[Use Cases & Examples](https://mihazs.github.io/petk/problems/use-cases)** - Real-world prompt engineering scenarios
-- **[Architecture Overview](https://mihazs.github.io/petk/explanation/architecture)** - System design and components
+- **[Getting Started Guide](https://petk.dev/learning/getting-started)** - Installation and first steps
+- **[Template Syntax Reference](https://petk.dev/reference/template-syntax)** - Complete syntax documentation
+- **[CLI Reference](https://petk.dev/reference/cli)** - All commands and options
+- **[Use Cases & Examples](https://petk.dev/problems/use-cases)** - Real-world prompt engineering scenarios
+- **[Architecture Overview](https://petk.dev/explanation/architecture)** - System design and components
 
 ## 🎯 Why Petk for Prompt Engineering?
 
