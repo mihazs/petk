@@ -1,1 +1,0 @@
-{"version":3,"sources":["../src/index.ts"],"sourcesContent":["export const optimizerPlaceholder = () => {\n    return 'optimizer';\n};"],"names":["optimizerPlaceholder"],"mappings":"AAAA,OAAO,IAAMA,uBAAuB;IAChC,OAAO;AACX,EAAE"}
