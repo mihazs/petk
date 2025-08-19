@@ -69,33 +69,37 @@ Petk treats prompts as structured content rather than code, making them accessib
 **Modular Composition**
 Break complex prompts into reusable components that can be combined and recombined for different scenarios:
 
-```markdown
+`````markdown
 <!-- Base instruction template -->
-<!--{ include: "instructions/base-reasoning.md" }-->
+```{petk:include}
+path: instructions/base-reasoning.md
+```
 
 <!-- Task-specific examples -->
-<!--{ 
-  include: "examples/classification/*.md",
-  order_by: "last_updated_desc",
-  limit: 3
-}-->
+```{petk:include}
+path: examples/classification/*.md
+order_by: last_updated_desc
+limit: 3
+```
 
 <!-- Context for current task -->
-<!--{ include: "context/{{domain}}/current-context.md" }-->
+```{petk:include}
+path: context/{{domain}}/current-context.md
 ```
+`````
 
 **Systematic Experimentation**
 Support for deterministic prompt variant generation enables systematic A/B testing and optimization:
 
-```markdown
+````markdown
 <!-- Generate consistent test sets -->
-<!--{ 
-  include: "test-cases/**/*.md",
-  order_by: "random",
-  seed: 42,
-  limit: 10
-}-->
+```{petk:include}
+path: test-cases/**/*.md
+order_by: random
+seed: 42
+limit: 10
 ```
+````
 
 ### Addressing Prompt Engineering Pain Points
 
@@ -126,23 +130,23 @@ Support for deterministic prompt variant generation enables systematic A/B testi
 **Challenge**: Providing effective examples for AI models to learn from without exceeding context limits.
 
 **Petk Solution**:
-```markdown
+````markdown
 # {{task_name}} Instructions
 
 {{base_instructions}}
 
 ## Examples
 
-<!--{ 
-  include: "examples/{{task_type}}/**/*.md",
-  order_by: "{{example_strategy}}",
-  limit: "{{max_examples}}"
-}-->
+```{petk:include}
+path: examples/{{task_type}}/**/*.md
+order_by: "{{example_strategy}}"
+limit: "{{max_examples}}"
+```
 
 ## Your Task
 
-{{current_task}}
-```
+\{\{current_task\}\}
+````
 
 **Benefits**:
 - Dynamic example selection based on task type
@@ -154,23 +158,27 @@ Support for deterministic prompt variant generation enables systematic A/B testi
 **Challenge**: Structuring complex reasoning tasks with consistent formatting and examples.
 
 **Petk Solution**:
-```markdown
-<!--{ include: "reasoning/chain-of-thought-instructions.md" }-->
+````markdown
+```{petk:include}
+path: reasoning/chain-of-thought-instructions.md
+```
 
 ## Reasoning Examples
 
-<!--{ include: "reasoning/examples/{{domain}}/*.md" }-->
+```{petk:include}
+path: reasoning/examples/{{domain}}/*.md
+```
 
 ## Problem to Solve
 
-{{problem_statement}}
+\{\{problem_statement\}\}
 
 Think through this step by step:
 1. **Understanding**: What is being asked?
 2. **Analysis**: What information do I need?
 3. **Reasoning**: How do I solve this?
 4. **Conclusion**: What is my final answer?
-```
+````
 
 **Benefits**:
 - Consistent reasoning structure across different domains
@@ -182,21 +190,24 @@ Think through this step by step:
 **Challenge**: Including relevant context while managing token limits and maintaining relevance.
 
 **Petk Solution**:
-```markdown
-<!--{ if: "user.experience_level === 'beginner'" }-->
-<!--{ include: "context/beginner-background.md" }-->
-<!--{ endif }-->
-
-<!--{ if: "task.complexity === 'high'" }-->
-<!--{ include: "examples/complex-scenarios/*.md", limit: 2 }-->
-<!--{ endif }-->
-
-<!--{ 
-  include: "knowledge-base/{{domain}}/**/*.md",
-  order_by: "last_updated_desc",
-  limit: "{{context_limit}}"
-}-->
+````markdown
+```{petk:include}
+path: context/beginner-background.md
+if: user.experience_level === 'beginner'
 ```
+
+```{petk:include}
+path: examples/complex-scenarios/*.md
+if: task.complexity === 'high'
+limit: 2
+```
+
+```{petk:include}
+path: knowledge-base/{{domain}}/**/*.md
+order_by: last_updated_desc
+limit: "{{context_limit}}"
+```
+````
 
 **Benefits**:
 - Adaptive context based on user characteristics
@@ -208,21 +219,31 @@ Think through this step by step:
 **Challenge**: Adapting prompts for different AI models with varying capabilities and prompt formats.
 
 **Petk Solution**:
-```markdown
-<!--{ if: "model.type === 'gpt-4'" }-->
-<!--{ include: "prompts/gpt4-optimized.md" }-->
-<!--{ elif: "model.type === 'claude'" }-->
-<!--{ include: "prompts/claude-optimized.md" }-->
-<!--{ else }-->
-<!--{ include: "prompts/generic-format.md" }-->
-<!--{ endif }-->
+````markdown
+```{petk:include}
+path: prompts/gpt4-optimized.md
+if: model.type === 'gpt-4'
+```
+
+```{petk:include}
+path: prompts/claude-optimized.md
+if: model.type === 'claude'
+```
+
+```{petk:include}
+path: prompts/generic-format.md
+if: model.type !== 'gpt-4' && model.type !== 'claude'
+```
 
 ## Task
 
-{{task_description}}
+\{\{task_description\}\}
 
-<!--{ include: "examples/{{model.type}}-examples/*.md", limit: 3 }-->
+```{petk:include}
+path: examples/{{model.type}}-examples/*.md
+limit: 3
 ```
+````
 
 **Benefits**:
 - Single source of truth with model-specific optimizations
@@ -257,28 +278,30 @@ const prompt = await processTemplate('user-query-template.md', {
 ### Testing and Evaluation Workflows
 
 **Systematic Prompt Testing**:
-```markdown
+````markdown
 <!-- Test case generation -->
-<!--{ 
-  include: "test-scenarios/**/*.md",
-  order_by: "random",
-  seed: "{{test_seed}}",
-  limit: "{{test_batch_size}}"
-}-->
+```{petk:include}
+path: test-scenarios/**/*.md
+order_by: random
+seed: "{{test_seed}}"
+limit: "{{test_batch_size}}"
 ```
+````
 
 **A/B Testing Support**:
-```markdown
+````markdown
 <!-- Version A -->
-<!--{ if: "variant === 'detailed'" }-->
-<!--{ include: "instructions/detailed-instructions.md" }-->
-<!--{ endif }-->
+```{petk:include}
+path: instructions/detailed-instructions.md
+if: variant === 'detailed'
+```
 
 <!-- Version B -->
-<!--{ if: "variant === 'concise'" }-->
-<!--{ include: "instructions/concise-instructions.md" }-->
-<!--{ endif }-->
+```{petk:include}
+path: instructions/concise-instructions.md
+if: variant === 'concise'
 ```
+````
 
 ### Knowledge Management
 
@@ -299,25 +322,29 @@ prompts/
 ```
 
 **Best Practice Documentation**:
-```markdown
+````markdown
 <!-- Meta-template for documenting patterns -->
-# {{pattern_name}} Pattern
+# \{\{pattern_name\}\} Pattern
 
 ## Purpose
-{{pattern_description}}
+\{\{pattern_description\}\}
 
 ## When to Use
-{{use_cases}}
+\{\{use_cases\}\}
 
 ## Template
-<!--{ include: "templates/{{pattern_name}}.md" }-->
+```{petk:include}
+path: templates/{{pattern_name}}.md
+```
 
 ## Examples
-<!--{ include: "examples/{{pattern_name}}/*.md" }-->
+```{petk:include}
+path: examples/{{pattern_name}}/*.md
+```
 
 ## Variations
-{{pattern_variations}}
-```
+\{\{pattern_variations\}\}
+````
 
 ## Measuring Success in Prompt Engineering
 

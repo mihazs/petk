@@ -42,11 +42,15 @@ yarn global add petk
 
 This is a basic template that will be processed by Petk.
 
-<!-- petk:include src="header.md" -->
+```{petk:include}
+path: header.md
+```
 
 Welcome to the content section!
 
-<!-- petk:include src="footer.md" -->
+```{petk:include}
+path: footer.md
+```
 ```
 
 2. Create the included files:
@@ -75,9 +79,9 @@ petk process example.md
 
 Petk uses special directive blocks to control template processing:
 
-- `<!-- petk:include -->` - Include content from other files
-- `<!-- petk:config -->` - Set processing configuration
-- `<!-- petk:transform -->` - Apply transformations to content
+- `{petk:include}` - Include content from other files
+- `{petk:config}` - Set processing configuration
+- `{petk:transform}` - Apply transformations to content
 
 ### File Processing
 

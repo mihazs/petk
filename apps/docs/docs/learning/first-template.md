@@ -189,13 +189,14 @@ path: ../components/personality-traits.md
 ```
 
 ## Domain Expertise
-
+````markdown
 ```{petk:include}
 glob: "../skills/*.md"
 filter_by_tag: "`{{skill_tags}}`"
 order_by: "relevance_score"
 limit: 3
 ```
+````
 
 ```{petk:include}
 path: ../components/response-format.md
@@ -213,7 +214,9 @@ path: ../components/response-format.md
 - Provide context for technical decisions and trade-offs
 - Explain complex topics at appropriate detail levels
 
-<!-- include: ../components/ethical-framework.md -->
+```{petk:include}
+path: ../components/ethical-framework.md
+```
 
 ## Interaction Guidelines
 

@@ -73,7 +73,7 @@ This guide covers the most frequently encountered issues when using Petk and pro
 
 ### Issue: Template directives not being processed
 
-**Problem:** Petk directives like `<!-- petk:include -->` are not being processed.
+**Problem:** Petk directives like `{petk:include}` are not being processed.
 
 **Diagnosis:**
 ```bash
@@ -87,22 +87,33 @@ petk process your-file.md --verbose
 **Solutions:**
 
 1. **Check directive syntax:**
-   ```markdown
+   ````markdown
    <!-- Correct -->
-   <!-- petk:include src="header.md" -->
+   ```{petk:include}
+   path: header.md
+   ```
    
    <!-- Incorrect -->
-   <!-- petk: include src="header.md" -->
-   <!-- petk:include src=header.md -->
+   ```{petk:include}
+   path: header.md
    ```
+   
+   ```{petk:include}
+   path: header.md
+   ```
+   ````
 
 2. **Verify file paths are correct:**
    ```markdown
    <!-- Use relative paths -->
-   <!-- petk:include src="./components/header.md" -->
-   
+   ```{petk:include}
+   path: ./components/header.md
+   ```
+
    <!-- Use absolute paths from project root -->
-   <!-- petk:include src="/templates/shared/footer.md" -->
+   ```{petk:include}
+   path: /templates/shared/footer.md
+   ```
    ```
 
 3. **Check file encoding:**
@@ -125,7 +136,9 @@ petk process your-file.md --verbose
 
 2. **Use absolute paths:**
    ```markdown
-   <!-- petk:include src="/full/path/to/file.md" -->
+   ```{petk:include}
+   path: /full/path/to/file.md
+   ```
    ```
 
 3. **Set base directory in configuration:**
@@ -399,14 +412,23 @@ petk validate ./templates/ --check-circular
    ```markdown
    <!-- Instead of mutual includes, use a common base -->
    <!-- base.md -->
-   <!-- petk:include src="header.md" -->
-   <!-- petk:include src="content.md" -->
-   <!-- petk:include src="footer.md" -->
+   ```{petk:include}
+   path: header.md
+   ```
+   ```{petk:include}
+   path: content.md
+   ```
+   ```{petk:include}
+   path: footer.md
+   ```
    ```
 
 3. **Use conditional includes:**
    ```markdown
-   <!-- petk:include src="header.md" if="!included.header" -->
+   ```{petk:include}
+   path: header.md
+   if: !included.header
+   ```
    ```
 
 ## Getting Help
