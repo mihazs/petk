@@ -15,7 +15,7 @@ jobs:
     
     strategy:
       matrix:
-        node-version: ['20', '22']
+        node-version: ['22', '23', 24']
     
     steps:
       - name: Checkout repository
@@ -27,6 +27,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -49,21 +50,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Validate conventional commits
+      - name: Validate Changesets
         run: |
-          # Install commitlint temporarily for validation
-          npx commitlint --from=${{ github.event.pull_request.base.sha }} --to=${{ github.event.pull_request.head.sha }} --verbose || {
-            echo "❌ Conventional commit validation failed"
-            echo "Please ensure your commit messages follow the conventional commits format:"
-            echo "  feat: add new feature"
-            echo "  fix: resolve bug"
-            echo "  docs: update documentation"
-            echo "  style: formatting changes"
-            echo "  refactor: code refactoring"
-            echo "  test: add or update tests"
-            echo "  chore: build process or auxiliary tool changes"
+          base_sha=${{ github.event.pull_request.base.sha }}
+          head_sha=${{ github.event.pull_request.head.sha }}
+          changed_files=$(git diff --name-only $base_sha $head_sha)
+          has_package_changes=$(echo "$changed_files" | grep -E '^apps/|^packages/' || true)
+          has_changeset=$(echo "$changed_files" | grep '^\\.changeset/' || true)
+          if [ -n "$has_package_changes" ] && [ -z "$has_changeset" ]; then
+            echo "❌ Changes detected in apps or packages but no changeset added. Please run 'pnpm changeset' to add one."
             exit 1
-          }
+          fi
+          echo "✅ Changesets validated"
 
       - name: Run lint
         run: pnpm run lint
@@ -102,7 +100,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2

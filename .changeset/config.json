@@ -1,0 +1,8 @@
+{
+  "changelog": ["@changesets/changelog-github", { "repo": "mihazs/petk" }],
+  "commit": true,  // Auto-commits version bumps and changelog updates
+  "access": "public",  // For public npm packages like your CLI
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",  // Auto-bumps internal deps (e.g., if CLI depends on a changed package in `packages/*`)
+  "ignore": ["packages/*"]  // Optional: If internal packages are private/not published; adjust as needed
+}
