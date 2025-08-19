@@ -56,7 +56,7 @@ yarn global add petk
 
 Create your first template and process it in minutes:
 
-```bash
+````bash
 # Create your first template
 echo '# Hello {{name}}!
 
@@ -65,11 +65,15 @@ path: examples/greeting.md
 ```
 
 Welcome to prompt engineering!' > greeting.md
+````
 
 # Process the template
+```bash
 petk process greeting.md --name "World"
+```
 
 # Convert to YAML for API usage
+```bash
 petk convert greeting.md --to yaml
 ```
 
