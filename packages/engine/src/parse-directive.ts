@@ -2,7 +2,7 @@ import { parseYaml } from '@petk/utils';
 import type { Directive, DirectiveType } from './types';
 
 export function parseDirective(yaml: string, type: DirectiveType): Directive {
-    let data: any;
+    let data: unknown;
     try {
         data = parseYaml(yaml);
     } catch (e) {
@@ -10,25 +10,32 @@ export function parseDirective(yaml: string, type: DirectiveType): Directive {
     }
 
     if (type === 'include') {
-        if (data && typeof data.path === 'string') {
-            return { type, path: data.path };
-        }
-        if (data && (typeof data.glob === 'string' || Array.isArray(data.glob))) {
-            return { type, ...data };
+        if (data && typeof data === 'object' && data !== null) {
+            const dataObj = data as Record<string, unknown>;
+            if (typeof dataObj.path === 'string') {
+                return { type, path: dataObj.path };
+            }
+            if (typeof dataObj.glob === 'string' || Array.isArray(dataObj.glob)) {
+                return { type, ...dataObj } as Directive;
+            }
         }
         throw new Error('Invalid include directive: missing or invalid path or glob');
     }
     if (type === 'var') {
-        if (!data || typeof data.name !== 'string' || !('value' in data)) {
-            throw new Error('Invalid var directive: missing name or value');
+        if (data && typeof data === 'object' && data !== null) {
+            const dataObj = data as Record<string, unknown>;
+            if (typeof dataObj.name === 'string' && 'value' in dataObj) {
+                return { type, name: dataObj.name, value: dataObj.value };
+            }
         }
-        return { type, name: data.name, value: data.value };
+        throw new Error('Invalid var directive: missing name or value');
     }
     if (type === 'if') {
-        if (!data || !('condition' in data)) {
-            throw new Error('Invalid if directive: missing condition');
+        if (data && typeof data === 'object' && data !== null && 'condition' in data) {
+            const dataObj = data as Record<string, unknown>;
+            return { type, condition: dataObj.condition };
         }
-        return { type, condition: data.condition };
+        throw new Error('Invalid if directive: missing condition');
     }
     throw new Error('Invalid directive type: ' + type);
 }

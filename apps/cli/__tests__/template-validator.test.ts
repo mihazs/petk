@@ -1,6 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { validateTemplate } from '../src/utils/template-validator';
-import type { ValidationResult } from '../src/utils/validation-types';
 
 describe('template validator', () => {
     describe('syntax validation', () => {

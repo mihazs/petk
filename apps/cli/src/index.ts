@@ -38,7 +38,14 @@ const parseVars = (value: string): Record<string, string> => {
     return vars;
 };
 
-const extractGlobalOptions = (options: any): GlobalOptions => ({
+interface CommanderGlobalOptions {
+    config?: string;
+    watch?: boolean;
+    vars?: Record<string, string>;
+    rag?: string;
+}
+
+const extractGlobalOptions = (options: CommanderGlobalOptions): GlobalOptions => ({
     config: options.config,
     watch: options.watch,
     vars: options.vars,
@@ -52,12 +59,12 @@ const addBuildCommand = (program: Command): Command => {
         .argument('<input>', 'input template file')
         .option('-o, --output <file>', 'output file path')
         .option('--optimize', 'enable optimization', false)
-        .action(async (input: string, options: any) => {
-            const globalOptions = extractGlobalOptions(program.opts());
+        .action(async (input: string, options: { output?: string; optimize?: boolean }) => {
+            const globalOptions = extractGlobalOptions(program.opts() as CommanderGlobalOptions);
             const buildOptions = { ...globalOptions, output: options.output, optimize: options.optimize };
             
-            console.log('Build command:', { input, options: buildOptions });
-            console.log('Build functionality will be implemented with @petk/engine integration');
+            process.stdout.write(`Build command: ${JSON.stringify({ input, options: buildOptions })}\n`);
+            process.stdout.write('Build functionality will be implemented with @petk/engine integration\n');
         });
 };
 
@@ -69,12 +76,12 @@ const addConvertCommand = (program: Command): Command => {
         .option('-o, --output <file>', 'output file path')
         .option('-f, --format <format>', 'output format (yaml|json)', 'yaml')
         .option('--eval', 'evaluate expressions in content', false)
-        .action(async (input: string, options: any) => {
-            const globalOptions = extractGlobalOptions(program.opts());
+        .action(async (input: string, options: { output?: string; format?: string; eval?: boolean }) => {
+            const globalOptions = extractGlobalOptions(program.opts() as CommanderGlobalOptions);
             const convertOptions = {
                 ...globalOptions,
                 output: options.output,
-                format: options.format,
+                format: (options.format as 'yaml' | 'json') || 'yaml',
                 eval: options.eval
             };
             
@@ -92,17 +99,17 @@ const addOptimizeCommand = (program: Command): Command => {
         .option('-o, --output <file>', 'output file path')
         .option('-m, --model <model>', 'LLM model for optimization')
         .option('-i, --iterations <n>', 'optimization iterations', '3')
-        .action(async (input: string, options: any) => {
-            const globalOptions = extractGlobalOptions(program.opts());
-            const optimizeOptions = { 
-                ...globalOptions, 
-                output: options.output, 
+        .action(async (input: string, options: { output?: string; model?: string; iterations?: string }) => {
+            const globalOptions = extractGlobalOptions(program.opts() as CommanderGlobalOptions);
+            const optimizeOptions = {
+                ...globalOptions,
+                output: options.output,
                 model: options.model,
-                iterations: parseInt(options.iterations, 10)
+                iterations: parseInt(options.iterations || '3', 10)
             };
             
-            console.log('Optimize command:', { input, options: optimizeOptions });
-            console.log('Optimization functionality will be implemented in Phase 5');
+            process.stdout.write(`Optimize command: ${JSON.stringify({ input, options: optimizeOptions })}\n`);
+            process.stdout.write('Optimization functionality will be implemented in Phase 5\n');
         });
 };
 
@@ -123,7 +130,7 @@ const handleErrors = (program: Command): void => {
             process.exit(0);
         }
         
-        console.error('Error:', err.message);
+        process.stderr.write(`Error: ${err.message}\n`);
         process.exit(1);
     });
 };
@@ -137,7 +144,7 @@ const runCli = async (): Promise<void> => {
         
         await programWithCommands.parseAsync(process.argv);
     } catch (error) {
-        console.error('CLI Error:', error);
+        process.stderr.write(`CLI Error: ${error}\n`);
         process.exit(1);
     }
 };

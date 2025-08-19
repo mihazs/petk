@@ -1,4 +1,4 @@
-import { OptimizeOptions, CommandContext } from '../types.js';
+import { OptimizeOptions } from '../types.js';
 
 export interface OptimizeResult {
     success: boolean;
@@ -19,11 +19,6 @@ export interface OptimizeResult {
 const validateOptimizeInput = (input: string): boolean => {
     return Boolean(input && input.length > 0);
 };
-
-const createOptimizeContext = (input: string, options: OptimizeOptions): CommandContext => ({
-    options,
-    args: [input]
-});
 
 const processOptimizeOptions = (input: string, options: OptimizeOptions): OptimizeOptions => {
     const model = options.model || 'gpt-4';
@@ -108,7 +103,6 @@ export const optimizeCommand = async (input: string, options: OptimizeOptions): 
         return handleOptimizeError(input, 'Input file path is required');
     }
     
-    const context = createOptimizeContext(input, options);
     const processedOptions = processOptimizeOptions(input, options);
     
     return executeOptimizeProcess(input, processedOptions);
@@ -116,24 +110,24 @@ export const optimizeCommand = async (input: string, options: OptimizeOptions): 
 
 export const displayOptimizeResult = (result: OptimizeResult): void => {
     if (result.success) {
-        console.log(`✅ ${result.message}`);
+        process.stdout.write(`✅ ${result.message}\n`);
         if (result.outputFile) {
-            console.log(`📄 Output: ${result.outputFile}`);
+            process.stdout.write(`📄 Output: ${result.outputFile}\n`);
         }
-        console.log(`🤖 Model: ${result.model}`);
-        console.log(`🔄 Iterations: ${result.iterations}`);
+        process.stdout.write(`🤖 Model: ${result.model}\n`);
+        process.stdout.write(`🔄 Iterations: ${result.iterations}\n`);
         
         if (result.optimizationStats.compressionRatio > 0) {
-            console.log('\n📊 Optimization Statistics:');
-            console.log(`  📈 Compression: ${result.optimizationStats.compressionRatio}%`);
-            console.log(`  🔢 Original size: ${result.optimizationStats.originalSize} bytes`);
-            console.log(`  🗜️  Optimized size: ${result.optimizationStats.optimizedSize} bytes`);
-            console.log(`  🎯 Tokens reduced: ${result.optimizationStats.tokensReduced}`);
+            process.stdout.write('\n📊 Optimization Statistics:\n');
+            process.stdout.write(`  📈 Compression: ${result.optimizationStats.compressionRatio}%\n`);
+            process.stdout.write(`  🔢 Original size: ${result.optimizationStats.originalSize} bytes\n`);
+            process.stdout.write(`  🗜️  Optimized size: ${result.optimizationStats.optimizedSize} bytes\n`);
+            process.stdout.write(`  🎯 Tokens reduced: ${result.optimizationStats.tokensReduced}\n`);
         }
     } else {
-        console.error(`❌ ${result.message}`);
+        process.stderr.write(`❌ ${result.message}\n`);
     }
     
-    console.log(`⏱️  Duration: ${result.duration}ms`);
-    console.log('📋 Note: Full optimization functionality will be implemented in Phase 5');
+    process.stdout.write(`⏱️  Duration: ${result.duration}ms\n`);
+    process.stdout.write('📋 Note: Full optimization functionality will be implemented in Phase 5\n');
 };

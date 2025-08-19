@@ -114,8 +114,8 @@ const transformTableToken = (token: Token & { type: 'table' }, context: Transfor
     order,
     sourceLineStart: getSourceLines(token).start,
     sourceLineEnd: getSourceLines(token).end,
-    headers: token.header?.map((cell: any) => cell.text || '') || [],
-    rows: token.rows?.map((row: any) => row.map((cell: any) => cell.text || '')) || [],
+    headers: token.header?.map((cell: { text?: string }) => cell.text || '') || [],
+    rows: token.rows?.map((row: { text?: string }[]) => row.map((cell: { text?: string }) => cell.text || '')) || [],
     alignment: token.align as ('left' | 'center' | 'right')[] | undefined
 });
 
@@ -155,7 +155,7 @@ const generateAnchor = (text: string): string => {
         .trim();
 };
 
-const transformListItems = (items: any[]): string[] => {
+const transformListItems = (items: Array<{ text?: string } | string>): string[] => {
     return items.map(item => {
         if (typeof item === 'string') return item;
         if (item.text) return item.text;
@@ -241,11 +241,12 @@ const transformSingleToken = (token: Token, context: TransformContext, order: nu
             case 'text':
                 return null;
             default:
-                console.warn(`Unhandled token type: ${token.type}`);
+                process.stderr.write(`Warning: Unhandled token type: ${token.type}\n`);
                 return null;
         }
     } catch (error) {
-        console.error(`Error transforming token type ${token.type}:`, error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        process.stderr.write(`Error transforming token type ${token.type}: ${errorMessage}\n`);
         return null;
     }
 };

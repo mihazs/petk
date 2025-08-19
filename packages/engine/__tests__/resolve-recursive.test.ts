@@ -60,30 +60,24 @@ describe('processTemplate', () => {
     
     const fileResolver = (fileMap: Record<string, string>) => (payload: any) => {
         // Debug log for payload
-        // eslint-disable-next-line no-console
-        console.log('[fileResolver] payload:', payload)
+        process.stdout.write(`[fileResolver] payload: ${JSON.stringify(payload)}\n`)
         if (typeof payload === 'string') {
             // Debug log: show payload and fileMap keys
-            // eslint-disable-next-line no-console
-            console.log('[fileResolver] payload:', payload, 'fileMap keys:', Object.keys(fileMap))
+            process.stdout.write(`[fileResolver] payload: ${payload}, fileMap keys: ${JSON.stringify(Object.keys(fileMap))}\n`)
             if (payload in fileMap) {
-                // eslint-disable-next-line no-console
-                console.log('[fileResolver] matched direct:', payload)
+                process.stdout.write(`[fileResolver] matched direct: ${payload}\n`)
                 return { id: payload, content: fileMap[payload] }
             }
             const base = basename(payload);
             if (base in fileMap) {
-                // eslint-disable-next-line no-console
-                console.log('[fileResolver] matched basename:', base)
+                process.stdout.write(`[fileResolver] matched basename: ${base}\n`)
                 return { id: base, content: fileMap[base] }
             }
-            // eslint-disable-next-line no-console
-            console.log('[fileResolver] not found:', payload)
+            process.stdout.write(`[fileResolver] not found: ${payload}\n`)
             throw new Error('Include not found: ' + payload)
         }
         if (payload && typeof payload === 'object' && payload.glob) {
-            // eslint-disable-next-line no-console
-            console.log('[fileResolver] glob payload:', payload)
+            process.stdout.write(`[fileResolver] glob payload: ${JSON.stringify(payload)}\n`)
             // For deduplication tests, resolve each glob path and return the first valid {id, content}
             const paths = Array.isArray(payload.glob) ? payload.glob : [payload.glob]
             for (const p of paths) {
@@ -98,8 +92,7 @@ describe('processTemplate', () => {
             // If no match, throw
             throw new Error('Include not found in glob array: ' + JSON.stringify(payload.glob))
         }
-        // eslint-disable-next-line no-console
-        console.log('[fileResolver] invalid payload:', payload)
+        process.stdout.write(`[fileResolver] invalid payload: ${JSON.stringify(payload)}\n`)
         throw new Error('Invalid include payload')
     }
     
@@ -130,12 +123,12 @@ describe('processTemplate', () => {
                 '```'
             ].join('\n')
             const options = { include: fileResolver(fileMap) }
-            console.log('cwd for glob:', dir)
-            console.log('files in cwd:', Object.keys(fileMap))
-            console.log('fileMap:', fileMap)
-            console.log('tpl:', tpl)
+            process.stdout.write(`cwd for glob: ${dir}\n`)
+            process.stdout.write(`files in cwd: ${JSON.stringify(Object.keys(fileMap))}\n`)
+            process.stdout.write(`fileMap: ${JSON.stringify(fileMap)}\n`)
+            process.stdout.write(`tpl: ${tpl}\n`)
             const out = await processTemplate(tpl, options)
-            console.log('out:', out)
+            process.stdout.write(`out: ${out}\n`)
             expect(out).toContain('A1')
             expect(out).toContain('A2')
         })
@@ -148,13 +141,13 @@ describe('processTemplate', () => {
                 '```'
             ].join('\n')
             const options = { include: fileResolver(fileMap) }
-            console.log('cwd for glob:', dir)
-            console.log('files in cwd:', Object.keys(fileMap))
-            console.log('fileMap:', fileMap)
-            console.log('tpl:', tpl)
+            process.stdout.write(`cwd for glob: ${dir}\n`)
+            process.stdout.write(`files in cwd: ${JSON.stringify(Object.keys(fileMap))}\n`)
+            process.stdout.write(`fileMap: ${JSON.stringify(fileMap)}\n`)
+            process.stdout.write(`tpl: ${tpl}\n`)
             const out = await processTemplate(tpl, options)
-            console.log('out:', out)
-            console.log('DEBUG: options.include payload:', JSON.stringify(options.include))
+            process.stdout.write(`out: ${out}\n`)
+            process.stdout.write(`DEBUG: options.include payload: ${JSON.stringify(options.include)}\n`)
             expect(out).toContain('A1')
             expect(out).toContain('A2')
         })
@@ -168,8 +161,8 @@ describe('processTemplate', () => {
                 '```'
             ].join('\n')
             const options = { include: fileResolver(fileMap) }
-            console.log('cwd for glob:', dir)
-            console.log('files in cwd:', Object.keys(fileMap))
+            process.stdout.write(`cwd for glob: ${dir}\n`)
+            process.stdout.write(`files in cwd: ${JSON.stringify(Object.keys(fileMap))}\n`)
             const out = await processTemplate(tpl, options)
             const idx1 = out.indexOf('A2')
             const idx2 = out.indexOf('A1')
@@ -186,8 +179,8 @@ describe('processTemplate', () => {
                 '```'
             ].join('\n')
             const options = { include: fileResolver(fileMap) }
-            console.log('cwd for glob:', dir)
-            console.log('files in cwd:', Object.keys(fileMap))
+            process.stdout.write(`cwd for glob: ${dir}\n`)
+            process.stdout.write(`files in cwd: ${JSON.stringify(Object.keys(fileMap))}\n`)
             const out1 = await processTemplate(tpl, options)
             const out2 = await processTemplate(tpl, options)
             expect(out1).toBe(out2)
@@ -207,14 +200,14 @@ describe('processTemplate', () => {
                 '```'
             ].join('\n')
             const options = { include: fileResolver(fileMap) }
-            console.log('cwd for glob:', dir)
-            console.log('files in cwd:', Object.keys(fileMap))
+            process.stdout.write(`cwd for glob: ${dir}\n`)
+            process.stdout.write(`files in cwd: ${JSON.stringify(Object.keys(fileMap))}\n`)
             const out = await processTemplate(tpl, options)
             // Debug: print fileMap keys and output
-            console.log('DEBUG fileMap keys:', Object.keys(fileMap))
-            console.log('DEBUG output:', out)
-            console.log('DEBUG A1 matches:', out.match(/A1/g))
-            console.log('DEBUG A2 matches:', out.match(/A2/g))
+            process.stdout.write(`DEBUG fileMap keys: ${JSON.stringify(Object.keys(fileMap))}\n`)
+            process.stdout.write(`DEBUG output: ${out}\n`)
+            process.stdout.write(`DEBUG A1 matches: ${JSON.stringify(out.match(/A1/g))}\n`)
+            process.stdout.write(`DEBUG A2 matches: ${JSON.stringify(out.match(/A2/g))}\n`)
             // Should only include each file once
             expect(out.match(/A1/g)?.length).toBe(1)
             expect(out.match(/A2/g)?.length).toBe(1)
@@ -229,8 +222,8 @@ describe('processTemplate', () => {
                 '```'
             ].join('\n')
             const options = { include: fileResolver(fileMap) }
-            console.log('cwd for glob:', dir)
-            console.log('files in cwd:', Object.keys(fileMap))
+            process.stdout.write(`cwd for glob: ${dir}\n`)
+            process.stdout.write(`files in cwd: ${JSON.stringify(Object.keys(fileMap))}\n`)
             await expect(processTemplate(tpl, options)).rejects.toThrow(/order_by/i)
         })
 
@@ -243,8 +236,8 @@ describe('processTemplate', () => {
                 '```'
             ].join('\n')
             const options = { include: fileResolver(fileMap) }
-            console.log('cwd for glob:', dir)
-            console.log('files in cwd:', Object.keys(fileMap))
+            process.stdout.write(`cwd for glob: ${dir}\n`)
+            process.stdout.write(`files in cwd: ${JSON.stringify(Object.keys(fileMap))}\n`)
             await expect(processTemplate(tpl, options)).rejects.toThrow(/sample_size/i)
         })
     
@@ -257,8 +250,8 @@ describe('processTemplate', () => {
                 '```'
             ].join('\n')
             const options = { include: fileResolver(fileMap) }
-            console.log('cwd for glob:', dir)
-            console.log('files in cwd:', Object.keys(fileMap))
+            process.stdout.write(`cwd for glob: ${dir}\n`)
+            process.stdout.write(`files in cwd: ${JSON.stringify(Object.keys(fileMap))}\n`)
             const out = await processTemplate(tpl, options)
             const matches = ['A1', 'A2'].filter(x => out.includes(x))
             expect(matches.length).toBe(1)
@@ -272,8 +265,8 @@ describe('processTemplate', () => {
                 '```'
             ].join('\n')
             const options = { include: fileResolver(fileMap) }
-            console.log('cwd for glob:', dir)
-            console.log('files in cwd:', Object.keys(fileMap))
+            process.stdout.write(`cwd for glob: ${dir}\n`)
+            process.stdout.write(`files in cwd: ${JSON.stringify(Object.keys(fileMap))}\n`)
             const out = await processTemplate(tpl, options)
             expect(out).toBe('')
         })
@@ -286,8 +279,8 @@ describe('processTemplate', () => {
                 '```'
             ].join('\n')
             const options = { include: fileResolver(fileMap) }
-            console.log('cwd for glob:', dir)
-            console.log('files in cwd:', Object.keys(fileMap))
+            process.stdout.write(`cwd for glob: ${dir}\n`)
+            process.stdout.write(`files in cwd: ${JSON.stringify(Object.keys(fileMap))}\n`)
             await expect(processTemplate(tpl, options)).rejects.toThrow()
         })
     })

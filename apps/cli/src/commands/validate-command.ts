@@ -6,7 +6,6 @@ import {
     ValidationConfig,
     ValidationReport,
     ValidationResult,
-    ValidationSeverity,
     ValidationCategory,
     DEFAULT_VALIDATION_CONFIG
 } from '../utils/validation-types.js';
@@ -38,11 +37,23 @@ interface ExtendedValidationReport extends ValidationReport {
     config: ValidationConfig;
 }
 
-const parseValidateOptions = (options: any): ValidateCommandOptions => ({
+interface CommanderOptions {
+    config?: string;
+    strict?: boolean;
+    verbose?: boolean;
+    format?: 'text' | 'json';
+    rules?: string;
+    enableCategories?: string;
+    disableCategories?: string;
+    enableRules?: string;
+    disableRules?: string;
+}
+
+const parseValidateOptions = (options: CommanderOptions): ValidateCommandOptions => ({
     config: options.config,
     strict: options.strict || false,
     verbose: options.verbose || false,
-    format: options.format || 'text',
+    format: (options.format as 'text' | 'json') || 'text',
     rules: options.rules ? options.rules.split(',') : undefined,
     enableCategories: options.enableCategories ? options.enableCategories.split(',') : undefined,
     disableCategories: options.disableCategories ? options.disableCategories.split(',') : undefined,
@@ -122,7 +133,7 @@ const createProgressReporter = (
 const validateTemplateFiles = async (
     templates: string[],
     config: ValidationConfig,
-    format: string = 'text'
+    format = 'text'
 ): Promise<ValidationResult[]> => {
     const results: ValidationResult[] = [];
     const progress = createProgressReporter(templates.length, format);
@@ -244,8 +255,8 @@ const executeValidation = async (
 ): Promise<void> => {
     try {
         if (templates.length === 0) {
-            console.error('Error: No template files specified.');
-            console.error('Usage: petk validate <template-files...> [options]');
+            process.stderr.write('Error: No template files specified.\n');
+            process.stderr.write('Usage: petk validate <template-files...> [options]\n');
             process.exit(2);
         }
         
@@ -254,11 +265,11 @@ const executeValidation = async (
             try {
                 const stats = await fs.stat(template);
                 if (stats.isDirectory()) {
-                    console.error('Expected a file');
+                    process.stderr.write('Expected a file\n');
                     process.exit(2);
                 }
-            } catch (error) {
-                console.error('File not found');
+            } catch {
+                process.stderr.write('File not found\n');
                 process.exit(2);
             }
         }
@@ -313,14 +324,14 @@ const executeValidation = async (
             }
         );
         
-        console.log(output);
+        process.stdout.write(`${output}\n`);
         
         const exitCode = determineExitCode(report);
         process.exit(exitCode);
         
     } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error occurred';
-        console.error(`Validation failed: ${message}`);
+        process.stderr.write(`Validation failed: ${message}\n`);
         process.exit(2);
     }
 };
@@ -426,7 +437,7 @@ PERFORMANCE NOTES:
   • Use --verbose for detailed timing and analysis information
   • JSON format is recommended for automated processing
 `)
-        .action(async (templates: string[], options: any) => {
+        .action(async (templates: string[], options: CommanderOptions) => {
             const validateOptions = parseValidateOptions(options);
             await executeValidation(templates, validateOptions);
         });

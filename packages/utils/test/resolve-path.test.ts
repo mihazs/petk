@@ -11,12 +11,12 @@ describe('resolvePath', () => {
     })
 
     it('throws if basePath is not a string', () => {
-        // @ts-expect-error
+        // @ts-expect-error - Testing runtime validation with number basePath
         expect(() => resolvePath(123, 'foo')).toThrow()
     })
 
     it('throws if targetPath is not a string', () => {
-        // @ts-expect-error
+        // @ts-expect-error - Testing runtime validation with number targetPath
         expect(() => resolvePath('/tmp', 123)).toThrow()
     })
 })

@@ -13,9 +13,9 @@ describe('estimateTokens', () => {
     });
 
     it('throws if input is not a string', () => {
-        // @ts-expect-error
+        // @ts-expect-error - Testing runtime validation with number input
         expect(() => estimateTokens(123)).toThrow();
-        // @ts-expect-error
+        // @ts-expect-error - Testing runtime validation with null input
         expect(() => estimateTokens(null)).toThrow();
     });
 

@@ -1,8 +1,12 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { convertMarkdown } from '@petk/converter';
-import { ConvertOptions, CommandContext } from '../types.js';
+import { ConvertOptions } from '../types.js';
 import * as yaml from 'js-yaml';
+
+interface NodeJSError extends Error {
+    code?: string;
+}
 
 export interface ConvertResult {
     success: boolean;
@@ -48,11 +52,6 @@ const validateConvertInput = (input: string): { isValid: boolean; error?: string
     
     return { isValid: true };
 };
-
-const createConvertContext = (input: string, options: ConvertOptions): CommandContext => ({
-    options,
-    args: [input]
-});
 
 const processConvertOptions = (input: string, options: ConvertOptions): ConvertOptions => {
     const format = options.format || 'yaml';
@@ -101,7 +100,7 @@ const readInputFile = async (inputPath: string): Promise<string> => {
     } catch (error) {
         if (error instanceof Error) {
             // Cast to NodeJS.ErrnoException to access code property
-            const nodeError = error as NodeJS.ErrnoException;
+            const nodeError = error as NodeJSError;
             
             // Provide more specific error messages
             if (nodeError.code === 'ENOENT') {
@@ -143,7 +142,7 @@ const writeOutputFile = async (outputPath: string, content: string): Promise<voi
             await fs.mkdir(outputDir, { recursive: true });
         } catch (mkdirError) {
             if (mkdirError instanceof Error) {
-                const nodeError = mkdirError as NodeJS.ErrnoException;
+                const nodeError = mkdirError as NodeJSError;
                 if (nodeError.code !== 'EEXIST') {
                     throw new Error(`Cannot create output directory '${outputDir}': ${mkdirError.message}`);
                 }
@@ -164,7 +163,7 @@ const writeOutputFile = async (outputPath: string, content: string): Promise<voi
     } catch (error) {
         if (error instanceof Error) {
             // Cast to NodeJS.ErrnoException to access code property
-            const nodeError = error as NodeJS.ErrnoException;
+            const nodeError = error as NodeJSError;
             
             // Provide more specific error messages
             if (nodeError.code === 'EACCES') {
@@ -253,7 +252,6 @@ export const convertCommand = async (input: string, options: ConvertOptions): Pr
         return handleConvertError(input, 'Input must be a valid .md file');
     }
     
-    const context = createConvertContext(input, options);
     const processedOptions = processConvertOptions(input, options);
     
     return executeConvertProcess(input, processedOptions);
@@ -261,16 +259,16 @@ export const convertCommand = async (input: string, options: ConvertOptions): Pr
 
 export const displayConvertResult = (result: ConvertResult): void => {
     if (result.success) {
-        console.log(`✅ ${result.message}`);
+        process.stdout.write(`✅ ${result.message}\n`);
         if (result.outputFile) {
-            console.log(`📄 Output: ${result.outputFile} (${result.format.toUpperCase()})`);
+            process.stdout.write(`📄 Output: ${result.outputFile} (${result.format.toUpperCase()})\n`);
         }
         if (result.stats) {
-            console.log(`📊 Stats: ${result.stats.itemCount} items, ${result.stats.inputSize} → ${result.stats.outputSize} bytes`);
+            process.stdout.write(`📊 Stats: ${result.stats.itemCount} items, ${result.stats.inputSize} → ${result.stats.outputSize} bytes\n`);
         }
     } else {
-        console.error(`❌ ${result.message}`);
+        process.stderr.write(`❌ ${result.message}\n`);
     }
     
-    console.log(`⏱️  Duration: ${result.duration}ms`);
+    process.stdout.write(`⏱️  Duration: ${result.duration}ms\n`);
 };

@@ -6,7 +6,11 @@ import type {
     ConversionResult,
     MarkdownToYamlOutput,
     ConversionError,
-    ContentItem
+    ContentItem,
+    HeadingItem,
+    ImageItem,
+    AudioItem,
+    VideoItem
 } from './types.js';
 
 export interface MarkdownToYamlConverter {
@@ -71,12 +75,16 @@ const convertMarkdownToYaml = (markdownContent: string, context: ConverterContex
             };
         }
 
-        const parseResult = parseMarkdownToTokens(markdownContent, context.options, {
-            totalStages: 1,
-            currentStage: 0,
+        const parseResult = parseMarkdownToTokens(markdownContent, {
+            ...context.options,
+            sourceFile: context.sourceFilename,
+            converterVersion: '1.0.0'
+        }, {
+            sourceFile: context.sourceFilename,
+            processingStartTime: Date.now(),
             warnings: [],
-            processingTime: 0,
-            memoryUsage: { initial: 0, peak: 0, final: 0 }
+            sourcePositions: new Map(),
+            contentItemCount: 0
         });
 
         if (!parseResult.success) {
@@ -90,7 +98,7 @@ const convertMarkdownToYaml = (markdownContent: string, context: ConverterContex
             };
         }
 
-        const tokensWithLinks = Object.assign(parseResult.data, { links: {} });
+        const tokensWithLinks = Object.assign([...parseResult.data], { links: {} });
         const transformResult = transformMarkdownTokens(tokensWithLinks, {
             sourceFilename: context.sourceFilename,
             options: context.options,
@@ -198,14 +206,16 @@ const createMarkdownToYamlOutput = (
 };
 
 const extractTitle = (contentItems: ContentItem[]): string | undefined => {
-    const firstHeading = contentItems.find(item => item.type === 'heading' && (item as any).level === 1);
-    return (firstHeading as any)?.text;
+    const firstHeading = contentItems.find(item =>
+        item.type === 'heading' && 'level' in item && item.level === 1
+    ) as HeadingItem | undefined;
+    return firstHeading?.text;
 };
 
 const calculateWordCount = (contentItems: ContentItem[]): number => {
     return contentItems.reduce((count, item) => {
-        if (item.type === 'paragraph' || item.type === 'heading') {
-            return count + ((item as any).text?.split(/\s+/).length || 0);
+        if ((item.type === 'paragraph' || item.type === 'heading') && 'text' in item) {
+            return count + (item.text?.split(/\s+/).length || 0);
         }
         return count;
     }, 0);
@@ -213,8 +223,8 @@ const calculateWordCount = (contentItems: ContentItem[]): number => {
 
 const calculateCharacterCount = (contentItems: ContentItem[]): number => {
     return contentItems.reduce((count, item) => {
-        if (item.type === 'paragraph' || item.type === 'heading') {
-            return count + ((item as any).text?.length || 0);
+        if ((item.type === 'paragraph' || item.type === 'heading') && 'text' in item) {
+            return count + (item.text?.length || 0);
         }
         return count;
     }, 0);
@@ -226,36 +236,60 @@ const countMultimodalItems = (contentItems: ContentItem[]): number => {
     ).length;
 };
 
-const extractHeadingStructure = (contentItems: ContentItem[]): any[] => {
+interface HeadingStructureItem {
+    id: string;
+    level: number;
+    text: string;
+    order: number;
+    children: HeadingStructureItem[];
+}
+
+interface TableOfContentsItem {
+    id: string;
+    title: string;
+    level: number;
+    anchor: string;
+}
+
+interface MultimodalAsset {
+    id: string;
+    type: 'image' | 'audio' | 'video';
+    src: string;
+    contentItemId: string;
+    metadata: Record<string, unknown>;
+}
+
+const extractHeadingStructure = (contentItems: ContentItem[]): HeadingStructureItem[] => {
     return contentItems
-        .filter(item => item.type === 'heading')
+        .filter((item): item is HeadingItem => item.type === 'heading')
         .map(heading => ({
             id: heading.id,
-            level: (heading as any).level,
-            text: (heading as any).text,
+            level: heading.level,
+            text: heading.text,
             order: heading.order,
             children: []
         }));
 };
 
-const generateTableOfContents = (contentItems: ContentItem[]): any[] => {
+const generateTableOfContents = (contentItems: ContentItem[]): TableOfContentsItem[] => {
     return contentItems
-        .filter(item => item.type === 'heading')
+        .filter((item): item is HeadingItem => item.type === 'heading')
         .map(heading => ({
             id: heading.id,
-            title: (heading as any).text,
-            level: (heading as any).level,
-            anchor: (heading as any).anchor || heading.id
+            title: heading.text,
+            level: heading.level,
+            anchor: heading.anchor || heading.id
         }));
 };
 
-const extractMultimodalAssets = (contentItems: ContentItem[]): any[] => {
+const extractMultimodalAssets = (contentItems: ContentItem[]): MultimodalAsset[] => {
     return contentItems
-        .filter(item => item.type === 'image' || item.type === 'audio' || item.type === 'video')
+        .filter((item): item is ImageItem | AudioItem | VideoItem =>
+            item.type === 'image' || item.type === 'audio' || item.type === 'video')
         .map(item => ({
             id: item.id,
             type: item.type,
-            src: (item as any).src,
+            src: item.src,
             contentItemId: item.id,
             metadata: {}
         }));

@@ -5,7 +5,6 @@ import {
     validateVariables,
     mergeVariables,
     formatVariables,
-    type VariableParseResult,
     type VariableParseOptions
 } from '../src/utils/variable-parser.js';
 
@@ -233,7 +232,7 @@ describe('Variable Parser Tests', () => {
 
         it('should validate variable value types', () => {
             // Arrange
-            const variables = { name: 'John', count: 42 as any };
+            const variables = { name: 'John', count: '42' };
             
             // Act
             const result = validateVariables(variables);

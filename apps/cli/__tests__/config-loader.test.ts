@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { loadConfiguration, getDefaultConfig, validateConfig } from '../src/config/config-loader.js';
 import { DEFAULT_CONFIG } from '../src/config/config-types.js';
-import type { ConfigLoadOptions, PetkConfig } from '../src/config/config-types.js';
+import type { ConfigLoadOptions } from '../src/config/config-types.js';
 
 // Mock fs module with all required methods
 vi.mock('fs', () => ({
@@ -30,9 +30,26 @@ vi.mock('path', () => ({
 }));
 
 describe('Config Loader Tests', () => {
-    let mockFs: any;
-    let mockYaml: any;
-    let mockPath: any;
+    let mockFs: {
+        readFileSync: ReturnType<typeof vi.fn>;
+        existsSync: ReturnType<typeof vi.fn>;
+        access: ReturnType<typeof vi.fn>;
+        promises: {
+            access: ReturnType<typeof vi.fn>;
+            readFile: ReturnType<typeof vi.fn>;
+            writeFile: ReturnType<typeof vi.fn>;
+            mkdir: ReturnType<typeof vi.fn>;
+        };
+    };
+    let mockYaml: {
+        load: ReturnType<typeof vi.fn>;
+        dump: ReturnType<typeof vi.fn>;
+    };
+    let mockPath: {
+        resolve: ReturnType<typeof vi.fn>;
+        dirname: ReturnType<typeof vi.fn>;
+        join: ReturnType<typeof vi.fn>;
+    };
 
     beforeEach(async () => {
         // Get mocked modules
@@ -167,7 +184,7 @@ describe('Config Loader Tests', () => {
             mockFs.existsSync.mockReturnValue(true);
             mockFs.readFileSync.mockImplementation(() => {
                 const error = new Error('EACCES: permission denied');
-                (error as any).code = 'EACCES';
+                (error as Error & { code: string }).code = 'EACCES';
                 throw error;
             });
 

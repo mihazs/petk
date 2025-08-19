@@ -169,10 +169,10 @@ export async function processTemplate(
                     output.slice(end)
                 changed = true
             } else if (directive.type === 'include') {
-                const payload = (directive as any).payload ?? (directive as any)
+                const payload = ('payload' in directive ? directive.payload : directive) as unknown
                 // Glob pattern detection: string with glob chars or object with glob key
                 let isGlob = false
-                let globPattern = ''
+                let globPattern: string | string[] = ''
                 let globOptions = {}
                 // Strict validation for unknown keys in glob payload
                 if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
@@ -195,11 +195,14 @@ export async function processTemplate(
                 if (typeof payload === 'string' && /[*?[\]{}]/.test(payload)) {
                     isGlob = true
                     globPattern = payload
-                } else if (payload && typeof payload === 'object' && (typeof payload.glob === 'string' || Array.isArray(payload.glob))) {
-                    isGlob = true
-                    globPattern = payload.glob
-                    globOptions = { ...payload }
-                    delete (globOptions as any).glob
+                } else if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+                    const payloadObj = payload as Record<string, unknown>;
+                    if (typeof payloadObj.glob === 'string' || Array.isArray(payloadObj.glob)) {
+                        isGlob = true
+                        globPattern = payloadObj.glob as string | string[]
+                        globOptions = { ...payload }
+                        delete (globOptions as Record<string, unknown>).glob
+                    }
                 }
                 let included = ''
                 if (isGlob) {
@@ -217,7 +220,7 @@ export async function processTemplate(
 
                     // Robust parsing: always extract glob and cwd to finalPattern/finalCwd
                     let finalPattern = pattern
-                    let finalCwd = (globOptions as any).cwd ?? process.cwd()
+                    let finalCwd = (globOptions as Record<string, unknown>).cwd as string ?? process.cwd()
 
                     // Always robustly extract glob string if pattern is a stringified object
                     if (typeof finalPattern === 'string') {
@@ -237,41 +240,42 @@ export async function processTemplate(
 
                     // Extract cwd and options from payload or globOptions
                     if (typeof payload === 'object' && payload !== null) {
-                        if ('pattern' in payload && typeof payload.pattern === 'string') {
-                            finalPattern = payload.pattern
+                        const payloadObj = payload as Record<string, unknown>;
+                        if ('pattern' in payloadObj && typeof payloadObj.pattern === 'string') {
+                            finalPattern = payloadObj.pattern
                         }
-                        if ('cwd' in payload && typeof payload.cwd === 'string') {
-                            finalCwd = payload.cwd
+                        if ('cwd' in payloadObj && typeof payloadObj.cwd === 'string') {
+                            finalCwd = payloadObj.cwd
                         }
                         // Accept both camelCase and snake_case for orderBy
-                        if (('orderBy' in payload && typeof payload.orderBy === 'string') ||
-                            ('order_by' in payload && typeof payload.order_by === 'string')) {
-                            orderBy = (payload.orderBy ?? payload.order_by) as GlobOrder
+                        if (('orderBy' in payloadObj && typeof payloadObj.orderBy === 'string') ||
+                            ('order_by' in payloadObj && typeof payloadObj.order_by === 'string')) {
+                            orderBy = (payloadObj.orderBy ?? payloadObj.order_by) as GlobOrder
                             if (!validOrders.includes(orderBy)) {
                                 throw new Error('Invalid order_by')
                             }
                         }
                         // Accept both camelCase and snake_case for sampleMode
-                        if (('sampleMode' in payload && typeof payload.sampleMode === 'string') ||
-                            ('sample_mode' in payload && typeof payload.sample_mode === 'string')) {
-                            sampleMode = (payload.sampleMode ?? payload.sample_mode) as GlobSampleMode
+                        if (('sampleMode' in payloadObj && typeof payloadObj.sampleMode === 'string') ||
+                            ('sample_mode' in payloadObj && typeof payloadObj.sample_mode === 'string')) {
+                            sampleMode = (payloadObj.sampleMode ?? payloadObj.sample_mode) as GlobSampleMode
                             if (!validSampleModes.includes(sampleMode)) {
                                 throw new Error('Invalid sample_mode')
                             }
                         }
                         // Accept both camelCase and snake_case for sampleCount
-                        if (('sampleCount' in payload && typeof payload.sampleCount === 'number') ||
-                            ('sample_size' in payload && typeof payload.sample_size === 'number')) {
-                            sampleCount = payload.sampleCount ?? payload.sample_size
+                        if (('sampleCount' in payloadObj && typeof payloadObj.sampleCount === 'number') ||
+                            ('sample_size' in payloadObj && typeof payloadObj.sample_size === 'number')) {
+                            sampleCount = (payloadObj.sampleCount ?? payloadObj.sample_size) as number
                             if (!Number.isInteger(sampleCount) || sampleCount < 1) {
                                 throw new Error('Invalid sample_size')
                             }
                         }
-                        if ('normalize' in payload && typeof payload.normalize === 'boolean') {
-                            normalize = payload.normalize
+                        if ('normalize' in payloadObj && typeof payloadObj.normalize === 'boolean') {
+                            normalize = payloadObj.normalize
                         }
-                        if ('seed' in payload && (typeof payload.seed === 'string' || typeof payload.seed === 'number')) {
-                            seed = payload.seed
+                        if ('seed' in payloadObj && (typeof payloadObj.seed === 'string' || typeof payloadObj.seed === 'number')) {
+                            seed = payloadObj.seed
                         }
                     }
                     // Validate glob pattern
@@ -288,7 +292,7 @@ export async function processTemplate(
                             pattern: finalPattern,
                             orderBy,
                             sampleMode,
-                            sampleCount,
+                            sampleCount: sampleCount as number | undefined,
                             validOrders,
                             validSampleModes
                         });
@@ -302,7 +306,7 @@ export async function processTemplate(
                         try {
                             files = await expandGlob(normalizedPatterns, { cwd: finalCwd })
                         } catch (err) {
-                            console.log('[petk-debug] [glob-include] error thrown for invalid glob pattern:', err)
+                            process.stderr.write(`[petk-debug] [glob-include] error thrown for invalid glob pattern: ${err}\n`)
                             throw new Error('Invalid glob pattern: ' + patternArr)
                         }
                         if (!files || files.length === 0) {
@@ -346,19 +350,18 @@ export async function processTemplate(
                     } else {
                         // Only pass plain glob patterns to expandGlob
                         // DEBUG: Print actual pattern and cwd used for glob
-                        console.log('[DUAL-PATH-DEBUG] Entering second code path (normalizedPattern branch), normalizedPattern:', normalizedPattern)
-                        // eslint-disable-next-line no-console
-                        console.log('[DEBUG][resolve-recursive] expandGlob pattern:', JSON.stringify(normalizedPattern), 'cwd:', JSON.stringify(finalCwd));
+                        process.stdout.write(`[DUAL-PATH-DEBUG] Entering second code path (normalizedPattern branch), normalizedPattern: ${JSON.stringify(normalizedPattern)}\n`)
+                        process.stdout.write(`[DEBUG][resolve-recursive] expandGlob pattern: ${JSON.stringify(normalizedPattern)}, cwd: ${JSON.stringify(finalCwd)}\n`)
                         let files: string[] = []
                         if (normalizedPattern.length > 0) {
                             files = Array.from(await expandGlob(normalizedPattern, { ...globOptions, cwd: finalCwd }))
                         }
                         // Always normalize and deduplicate files, regardless of source
-                        console.log('[petk-debug] [deduplication][TEST-MARKER][PRE] files before normalization and deduplication:', files)
+                        process.stdout.write(`[petk-debug] [deduplication][TEST-MARKER][PRE] files before normalization and deduplication: ${JSON.stringify(files)}\n`)
                         files = normalizeAndDeduplicateFiles(files)
-                        console.log('[petk-debug] [deduplication][TEST-MARKER][POST] files after normalization and deduplication:', files)
+                        process.stdout.write(`[petk-debug] [deduplication][TEST-MARKER][POST] files after normalization and deduplication: ${JSON.stringify(files)}\n`)
                         files = normalizeAndDeduplicateFiles(files)
-                        console.log('[petk-debug] [deduplication][TEST-MARKER] files after normalization and deduplication:', files)
+                        process.stdout.write(`[petk-debug] [deduplication][TEST-MARKER] files after normalization and deduplication: ${JSON.stringify(files)}\n`)
                         // [petk-debug] validation already performed at payload parsing stage
                         if (normalize) {
                             files = Array.from(normalizePaths(files))
@@ -373,12 +376,12 @@ export async function processTemplate(
                             files = Array.from(sampleEntries(files, sampleCount, sampleMode))
                         }
                         // LOG: print files before processing
-                        console.log('[petk-debug] glob pattern:', finalPattern, 'cwd:', finalCwd, 'matched files:', files)
-                        files.forEach((f, idx) => console.log(`[petk-debug] file[${idx}]:`, f))
+                        process.stdout.write(`[petk-debug] glob pattern: ${finalPattern}, cwd: ${finalCwd}, matched files: ${JSON.stringify(files)}\n`)
+                        files.forEach((f, idx) => process.stdout.write(`[petk-debug] file[${idx}]: ${f}\n`))
                         const contents = await Promise.all(
                             files.map(async (file) => {
                                 const resolved = options.include(file, chain)
-                                console.log('[petk-debug] resolving file:', file, 'resolved:', resolved)
+                                process.stdout.write(`[petk-debug] resolving file: ${file}, resolved: ${JSON.stringify(resolved)}\n`)
                                 if (!resolved || typeof resolved !== 'object' || typeof resolved.id !== 'string' || typeof resolved.content !== 'string') {
                                     throw new Error('Invalid include resolution')
                                 }
@@ -387,8 +390,8 @@ export async function processTemplate(
                             })
                         )
                         included = contents.join('')
-                        console.log('[petk-debug] included after glob:', included)
-                        console.log('[DUAL-PATH-DEBUG] Second code path completed, included length:', included.length, 'content preview:', included.slice(0, 50))
+                        process.stdout.write(`[petk-debug] included after glob: ${included}\n`)
+                        process.stdout.write(`[DUAL-PATH-DEBUG] Second code path completed, included length: ${included.length}, content preview: ${included.slice(0, 50)}\n`)
                     }
                 } else {
                     const resolved = options.include(payload, chain)

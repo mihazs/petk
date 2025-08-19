@@ -118,18 +118,30 @@ const createConversionMetadata = (options: YamlConversionOptions) => {
 
 const logVerbose = (message: string, verbose?: boolean): void => {
     if (verbose) {
-        console.log(`[YAML Converter] ${message}`);
+        process.stdout.write(`[YAML Converter] ${message}\n`);
     }
 };
 
-const createError = (type: string, message: string, details?: any, extra?: any): any => ({
-    type,
-    message,
-    code: type.toUpperCase(),
-    name: type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-    ...details,
-    ...extra
-});
+const createError = (type: string, message: string, details?: Record<string, unknown>, extra?: Record<string, unknown>): YamlConversionError | ContentValidationError | EmptyContentError => {
+    const baseError = {
+        message,
+        code: type.toUpperCase(),
+        name: type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        ...details,
+        ...extra
+    };
+
+    switch (type) {
+        case 'yaml_conversion_error':
+            return { type: 'yaml_conversion_error' as const, ...baseError };
+        case 'content_validation_error':
+            return { type: 'content_validation_error' as const, ...baseError };
+        case 'empty_content_error':
+            return { type: 'empty_content_error' as const, ...baseError };
+        default:
+            return { type: 'yaml_conversion_error' as const, ...baseError };
+    }
+};
 
 export const convertToYaml = (
     contentItems: ContentItem[],

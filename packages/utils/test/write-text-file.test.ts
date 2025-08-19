@@ -28,9 +28,9 @@ describe('writeTextFile', () => {
     })
 
     it('throws if path is not a string', () => {
-        // @ts-expect-error
+        // @ts-expect-error - Testing runtime validation with number path
         expect(() => writeTextFile(123, 'abc')).toThrow()
-        // @ts-expect-error
+        // @ts-expect-error - Testing runtime validation with null path
         expect(() => writeTextFile(null, 'abc')).toThrow()
     })
 
@@ -39,9 +39,9 @@ describe('writeTextFile', () => {
     })
 
     it('throws if content is not a string', () => {
-        // @ts-expect-error
+        // @ts-expect-error - Testing runtime validation with number content
         expect(() => writeTextFile(filePath, 123)).toThrow()
-        // @ts-expect-error
+        // @ts-expect-error - Testing runtime validation with null content
         expect(() => writeTextFile(filePath, null)).toThrow()
     })
 })

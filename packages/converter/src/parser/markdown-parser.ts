@@ -78,7 +78,7 @@ function createWalkTokensFunction(options: ConversionOptions) {
             const mediaMatches = detectMediaElements(token.text || token.raw, options);
             if (mediaMatches.length > 0) {
                 // Add metadata to track media elements
-                (token as any).mediaElements = mediaMatches;
+                (token as Token & { mediaElements?: MediaDetectionResult[] }).mediaElements = mediaMatches;
             }
         }
     };

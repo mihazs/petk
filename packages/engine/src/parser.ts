@@ -58,6 +58,6 @@ export function parseAll(input: string): Directive[] {
         }
     }
 
-    // TypeScript: downstream expects .range on all directives, so cast to any for sort
-    return ([...blocks, ...shortForm] as any[]).sort((a, b) => a.range.start - b.range.start);
+    // TypeScript: downstream expects .range on all directives
+    return ([...blocks, ...shortForm] as (Directive & { range: { start: number; end: number } })[]).sort((a, b) => a.range.start - b.range.start);
 }

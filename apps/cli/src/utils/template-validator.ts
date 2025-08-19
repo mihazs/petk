@@ -1,4 +1,4 @@
-import { ValidationResult, ValidationContext, ValidationConfig, DEFAULT_VALIDATION_CONFIG, ValidationCategory, ValidationSeverity } from './validation-types';
+import { ValidationResult, ValidationConfig, ValidationCategory, ValidationSeverity } from './validation-types';
 
 // Directive discovery logic adapted from block-extractor.ts
 const DIRECTIVE_INFOS = [
@@ -143,9 +143,6 @@ const createValidationResult = (
     type
 });
 
-const getLineNumber = (content: string, index: number): number => {
-    return content.substring(0, index).split('\n').length;
-};
 
 const detectPathTraversal = (path: string, lineNumber: number, filePath?: string): ExtendedValidationResult[] => {
     const results: ExtendedValidationResult[] = [];
@@ -297,12 +294,12 @@ const detectMemoryExhaustion = (content: string, filePath?: string): ExtendedVal
                             'RESOURCE_EXHAUSTION'
                         ));
                     }
-                } catch (yamlError) {
+                } catch {
                     // Skip invalid YAML blocks - they will be caught by syntax validation
                 }
             }
         }
-    } catch (error) {
+    } catch {
         // Skip directive parsing errors - they will be caught by syntax validation
     }
     
@@ -310,7 +307,7 @@ const detectMemoryExhaustion = (content: string, filePath?: string): ExtendedVal
 };
 
 // Simple YAML parser for validation (avoiding external dependencies)
-const parseYamlBasic = (yamlContent: string): any => {
+const parseYamlBasic = (yamlContent: string): Record<string, unknown> | null => {
     if (!yamlContent.trim()) {
         return null;
     }
@@ -318,7 +315,7 @@ const parseYamlBasic = (yamlContent: string): any => {
     try {
         // Basic YAML parsing - handle simple key-value pairs
         const lines = yamlContent.split('\n').filter(line => line.trim() && !line.trim().startsWith('#'));
-        const result: any = {};
+        const result: Record<string, unknown> = {};
         
         for (const line of lines) {
             if (line.includes(':')) {
@@ -378,12 +375,12 @@ const validateDirectiveContent = (block: Block, filePath?: string): ValidationRe
             }
             
             // Validate path/glob for security issues if present
-            if (data && data.path) {
+            if (data && data.path && typeof data.path === 'string') {
                 const pathSecurityResults = validateSecurity(data.path, filePath);
                 results.push(...pathSecurityResults);
             }
             if (data && data.glob) {
-                const globValue = Array.isArray(data.glob) ? data.glob.join(' ') : data.glob;
+                const globValue = Array.isArray(data.glob) ? data.glob.join(' ') : String(data.glob);
                 const globSecurityResults = validateSecurity(globValue, filePath);
                 results.push(...globSecurityResults);
             }
@@ -615,12 +612,12 @@ const extractIncludePaths = (content: string): { path: string; lineNumber: numbe
                             }
                         }
                     }
-                } catch (yamlError) {
+                } catch {
                     // Skip invalid YAML blocks - they will be caught by syntax validation
                 }
             }
         }
-    } catch (error) {
+    } catch {
         // Skip directive parsing errors - they will be caught by syntax validation
     }
     
@@ -700,7 +697,6 @@ const validateDependencies = (content: string, filePath?: string): ValidationRes
         }
         
         // Check for self-references and resource exhaustion
-        const paths = includePaths.map(include => include.path);
         for (const include of includePaths) {
             if (filePath && (include.path === filePath || include.path.endsWith(filePath))) {
                 results.push(createValidationResult(

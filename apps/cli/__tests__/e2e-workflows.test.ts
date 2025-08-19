@@ -5,7 +5,7 @@ import { validateCommand } from '../src/commands/validate-command.js';
 import { loadConfiguration } from '../src/config/config-loader.js';
 import { parseVariablesSimple } from '../src/utils/variable-parser.js';
 import { createWatchHandlerFromConfig, type WatchHandler } from '../src/utils/watch-handler.js';
-import type { BuildOptions, ConvertOptions, ValidateOptions } from '../src/types.js';
+import type { BuildOptions, ConvertOptions } from '../src/types.js';
 import type { WatchConfig } from '../src/config/config-types.js';
 
 // Mock external dependencies
@@ -348,12 +348,12 @@ describe('E2E Workflow Tests', () => {
             
             // Simulate template-specific variable resolution
             const template1Variables = typeof baseVariables === 'object' && baseVariables !== null
-                ? { ...baseVariables, ...((baseVariables as any).template1 || {}) }
+                ? { ...baseVariables, ...((baseVariables as Record<string, unknown>).template1 || {}) }
                 : {};
 
             // Assert
-            expect(template1Variables.specific).toBe('value1');
-            expect(template1Variables.global).toBe('value');
+            expect((template1Variables as any).specific).toBe('value1');
+            expect((template1Variables as any).global).toBe('value');
         });
     });
 

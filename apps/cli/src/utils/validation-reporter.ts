@@ -7,7 +7,6 @@ import {
     RiskLevel,
     SecurityAssessment,
     PerformanceMetrics,
-    FileRiskData,
     DetailedSummary
 } from './validation-types.js';
 
@@ -62,7 +61,7 @@ const formatLineReference = (line?: number): string =>
     line ? `:${line}` : '';
 
 const formatValidationResult = (result: ValidationResult, options: FormatOptions): string => {
-    const { format, colors = true, detailed = false } = options;
+    const { format, colors = true } = options;
     const verbose = format === 'verbose';
     const severityFormatted = formatSeverityLevel(result.severity, colors);
     const fileFormatted = formatFilePath(result.filePath || 'unknown', colors);

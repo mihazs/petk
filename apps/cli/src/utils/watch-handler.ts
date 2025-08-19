@@ -1,4 +1,5 @@
 import chokidar, { FSWatcher } from 'chokidar';
+import { Stats } from 'fs';
 import { WatchConfig } from '../config/config-types.js';
 
 export interface WatchOptions {
@@ -13,7 +14,7 @@ export interface WatchOptions {
 export interface WatchEvent {
     type: 'add' | 'change' | 'unlink' | 'addDir' | 'unlinkDir';
     path: string;
-    stats?: any;
+    stats?: Stats;
 }
 
 export interface WatchHandler {
@@ -33,10 +34,10 @@ const DEFAULT_WATCH_OPTIONS: Required<Omit<WatchOptions, 'patterns' | 'cwd'>> = 
     followSymlinks: false
 };
 
-const createDebouncer = (callback: Function, delay: number) => {
-    let timeoutId: NodeJS.Timeout | null = null;
+const createDebouncer = <T extends unknown[]>(callback: (...args: T) => void, delay: number) => {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
     
-    return (...args: any[]) => {
+    return (...args: T) => {
         if (timeoutId) {
             clearTimeout(timeoutId);
         }
@@ -68,7 +69,7 @@ const createChokidarOptions = (options: WatchOptions) => {
     };
 };
 
-const mapChokidarEvent = (event: string, path: string, stats?: any): WatchEvent => ({
+const mapChokidarEvent = (event: string, path: string, stats?: Stats): WatchEvent => ({
     type: event as WatchEvent['type'],
     path,
     stats
@@ -109,7 +110,7 @@ export const createWatchHandler = (
     const debouncedCallback = createDebouncer(callback, mergedOptions.debounceMs);
     const state = createWatchState();
     
-    const handleWatchEvent = (event: string) => (path: string, stats?: any) => {
+    const handleWatchEvent = (event: string) => (path: string, stats?: Stats) => {
         const watchEvent = mapChokidarEvent(event, path, stats);
         debouncedCallback(watchEvent);
     };
@@ -119,7 +120,7 @@ export const createWatchHandler = (
         if (errorCallback) {
             errorCallback(error);
         } else {
-            console.error('Watch error:', error);
+            process.stderr.write(`Watch error: ${error.message}\n`);
         }
     };
     

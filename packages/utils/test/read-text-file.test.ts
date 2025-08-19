@@ -21,11 +21,11 @@ describe('readTextFile', () => {
     });
 
     it('throws if path is not a string', () => {
-        // @ts-expect-error
+        // @ts-expect-error - Testing runtime validation with number input
         expect(() => readTextFile(123)).toThrow();
-        // @ts-expect-error
+        // @ts-expect-error - Testing runtime validation with null input
         expect(() => readTextFile(null)).toThrow();
-        // @ts-expect-error
+        // @ts-expect-error - Testing runtime validation with undefined input
         expect(() => readTextFile(undefined)).toThrow();
     });
 

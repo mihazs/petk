@@ -99,7 +99,7 @@ describe('CLI Integration Tests', () => {
             // Act
             try {
                 await programWithCommands.parseAsync(['node', 'petk', 'build', 'test.md']);
-            } catch (error) {
+            } catch {
                 // Expected due to mocking
             }
             
@@ -138,7 +138,7 @@ describe('CLI Integration Tests', () => {
             // Act
             try {
                 await programWithCommands.parseAsync(['node', 'petk', '--config', 'custom.yaml', 'build', 'test.md']);
-            } catch (error) {
+            } catch {
                 // Expected due to mocking
             }
             
@@ -157,7 +157,7 @@ describe('CLI Integration Tests', () => {
             // Act
             try {
                 await programWithCommands.parseAsync(['node', 'petk', '--watch', 'build', 'test.md']);
-            } catch (error) {
+            } catch {
                 // Expected due to mocking
             }
             
@@ -176,7 +176,7 @@ describe('CLI Integration Tests', () => {
             // Act
             try {
                 await programWithCommands.parseAsync(['node', 'petk', '--vars', 'key1=value1,key2=value2', 'build', 'test.md']);
-            } catch (error) {
+            } catch {
                 // Expected due to mocking
             }
             
@@ -241,13 +241,13 @@ describe('CLI Integration Tests', () => {
             // Act
             try {
                 await programWithCommands.parseAsync([
-                    'node', 'petk', 
+                    'node', 'petk',
                     '--config', 'custom.yaml',
-                    'build', 'input.md', 
-                    '--output', 'output.md', 
+                    'build', 'input.md',
+                    '--output', 'output.md',
                     '--optimize'
                 ]);
-            } catch (error) {
+            } catch {
                 // Expected due to mocking
             }
             
@@ -275,12 +275,12 @@ describe('CLI Integration Tests', () => {
             // Act
             try {
                 await programWithCommands.parseAsync([
-                    'node', 'petk', 
-                    'convert', 'input.md', 
+                    'node', 'petk',
+                    'convert', 'input.md',
                     '--format', 'json',
                     '--eval'
                 ]);
-            } catch (error) {
+            } catch {
                 // Expected due to mocking
             }
             
@@ -300,12 +300,12 @@ describe('CLI Integration Tests', () => {
             // Act
             try {
                 await programWithCommands.parseAsync([
-                    'node', 'petk', 
-                    'optimize', 'input.md', 
+                    'node', 'petk',
+                    'optimize', 'input.md',
                     '--model', 'gpt-4',
                     '--iterations', '5'
                 ]);
-            } catch (error) {
+            } catch {
                 // Expected due to mocking
             }
             
