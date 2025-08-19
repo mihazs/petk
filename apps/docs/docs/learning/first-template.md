@@ -284,7 +284,7 @@ path: ../components/ethical-framework.md
 Build sophisticated templates that demonstrate complex include patterns:
 
 **templates/persona-generator.md:**
-```markdown
+````markdown
 ---
 generator: AI Persona Assembly System
 version: "`{{version}}`"
@@ -312,7 +312,7 @@ sampling_method: "deterministic"
 
 ## Contextual Adaptations
 
-Based on the specified use case: **\{\{use_case\}\}**
+Based on the specified use case: **\\{\\{use_case\\}\\}**
 
 ```{petk:include}
 glob: "adaptations/`{{use_case}}`/*.md"
@@ -334,7 +334,7 @@ This persona definition should be used as a system prompt for AI assistants. Key
 
 *Template processed with Petk v`{{version}}` - `{{project_name}}`*
 *For questions or customization, refer to the template documentation.*
-```
+````
 
 ### 7. Add Enhancement Modules
 
@@ -420,7 +420,7 @@ petk validate templates/persona-generator.md
 Add conditional logic to your templates:
 
 **templates/adaptations/enterprise_consulting/security-focus.md:**
-```markdown
+````markdown
 ## Security-First Approach
 
 When working with enterprise clients, prioritize:
@@ -434,14 +434,14 @@ When working with enterprise clients, prioritize:
 path: "../../components/security-checklist.md"
 condition: "`{{security_level}}` == 'high'"
 ```
-```
+````
 
 ### 11. Dynamic Content Sampling
 
 Use sampling for variety in generated content:
 
 **templates/persona-generator.md** (enhanced section):
-```markdown
+````markdown
 ## Personality Variations
 
 ```{petk:include}
@@ -450,7 +450,7 @@ sampling_method: "deterministic"
 sample_size: 3
 seed: "`{{role_type}}`"
 ```
-```
+````
 
 ### 12. Hierarchical Organization
 

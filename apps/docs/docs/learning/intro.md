@@ -37,7 +37,7 @@ yarn global add petk
 
 1. Create a new Markdown file called `example.md`:
 
-```markdown
+````markdown
 # My First Template
 
 This is a basic template that will be processed by Petk.
@@ -51,7 +51,7 @@ Welcome to the content section!
 ```{petk:include}
 path: footer.md
 ```
-```
+````
 
 2. Create the included files:
 

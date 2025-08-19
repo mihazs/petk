@@ -84,7 +84,7 @@ You can customize these settings for your project needs.
 
 Create a simple template file at `templates/welcome.md`:
 
-```markdown
+````markdown
 # Welcome to {{project_name}}
 
 This is a template created by {{author}}.
@@ -95,7 +95,7 @@ path: snippets/common-instructions.md
 
 ## Project Overview
 This project demonstrates Petk's template processing capabilities.
-```
+````
 
 Create the included snippet at `templates/snippets/common-instructions.md`:
 
@@ -172,13 +172,13 @@ Use markdown code blocks with the `{petk:include}` directive to dynamically incl
 
 ### Advanced Includes
 Petk supports sophisticated include patterns:
-```markdown
+````markdown
 ```{petk:include}
 glob: "examples/*.md"
 order_by: "last_updated_desc"
 limit: 5
 ```
-```
+````
 
 ## Development Workflow
 

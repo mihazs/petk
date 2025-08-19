@@ -104,7 +104,7 @@ petk process your-file.md --verbose
    ````
 
 2. **Verify file paths are correct:**
-   ```markdown
+   ````markdown
    <!-- Use relative paths -->
    ```{petk:include}
    path: ./components/header.md
@@ -114,7 +114,7 @@ petk process your-file.md --verbose
    ```{petk:include}
    path: /templates/shared/footer.md
    ```
-   ```
+   ````
 
 3. **Check file encoding:**
    ```bash
@@ -135,11 +135,11 @@ petk process your-file.md --verbose
    ```
 
 2. **Use absolute paths:**
-   ```markdown
+   ````markdown
    ```{petk:include}
    path: /full/path/to/file.md
    ```
-   ```
+   ````
 
 3. **Set base directory in configuration:**
    ```javascript
@@ -409,7 +409,7 @@ petk validate ./templates/ --check-circular
    ```
 
 2. **Restructure includes:**
-   ```markdown
+   ````markdown
    <!-- Instead of mutual includes, use a common base -->
    <!-- base.md -->
    ```{petk:include}
@@ -421,15 +421,15 @@ petk validate ./templates/ --check-circular
    ```{petk:include}
    path: footer.md
    ```
-   ```
+   ````
 
 3. **Use conditional includes:**
-   ```markdown
+   ````markdown
    ```{petk:include}
    path: header.md
    if: !included.header
    ```
-   ```
+   ````
 
 ## Getting Help
 

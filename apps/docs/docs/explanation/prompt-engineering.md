@@ -69,7 +69,7 @@ Petk treats prompts as structured content rather than code, making them accessib
 **Modular Composition**
 Break complex prompts into reusable components that can be combined and recombined for different scenarios:
 
-`````markdown
+````markdown
 <!-- Base instruction template -->
 ```{petk:include}
 path: instructions/base-reasoning.md
@@ -86,7 +86,7 @@ limit: 3
 ```{petk:include}
 path: context/{{domain}}/current-context.md
 ```
-`````
+````
 
 **Systematic Experimentation**
 Support for deterministic prompt variant generation enables systematic A/B testing and optimization:
@@ -145,7 +145,7 @@ limit: "{{max_examples}}"
 
 ## Your Task
 
-\{\{current_task\}\}
+\\{\\{current_task\\}\\}
 ````
 
 **Benefits**:
@@ -171,7 +171,7 @@ path: reasoning/examples/{{domain}}/*.md
 
 ## Problem to Solve
 
-\{\{problem_statement\}\}
+\\{\\{problem_statement\\}\\}
 
 Think through this step by step:
 1. **Understanding**: What is being asked?
@@ -237,7 +237,7 @@ if: model.type !== 'gpt-4' && model.type !== 'claude'
 
 ## Task
 
-\{\{task_description\}\}
+\\{\\{task_description\\}\\}
 
 ```{petk:include}
 path: examples/{{model.type}}-examples/*.md
@@ -324,13 +324,13 @@ prompts/
 **Best Practice Documentation**:
 ````markdown
 <!-- Meta-template for documenting patterns -->
-# \{\{pattern_name\}\} Pattern
+# \\{\\{pattern_name\\}\\} Pattern
 
 ## Purpose
-\{\{pattern_description\}\}
+\\{\\{pattern_description\\}\\}
 
 ## When to Use
-\{\{use_cases\}\}
+\\{\\{use_cases\\}\\}
 
 ## Template
 ```{petk:include}
@@ -343,7 +343,7 @@ path: examples/{{pattern_name}}/*.md
 ```
 
 ## Variations
-\{\{pattern_variations\}\}
+\\{\\{pattern_variations\\}\\}
 ````
 
 ## Measuring Success in Prompt Engineering

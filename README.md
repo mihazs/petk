@@ -114,7 +114,7 @@ petk convert greeting.md --to yaml
 
 **1. Create a base template (`base-prompt.md`):**
 
-```markdown
+````markdown
 # AI Assistant Instructions
 
 You are a helpful AI assistant specialized in {{domain}}.
@@ -139,7 +139,7 @@ glob: examples/{{domain}}/*.md
 limit: 3
 order_by: last_updated_desc
 ```
-```
+````
 
 **2. Process with variables:**
 
@@ -174,17 +174,17 @@ Directives use fenced code blocks with YAML syntax:
 
 #### Basic File Inclusion
 
-```markdown
+````markdown
 ```{petk:include}
 path: shared/header.md
 ```
-```
+````
 
 #### Advanced Glob Patterns
 
 Include multiple files using glob patterns with sorting and filtering:
 
-```markdown
+````markdown
 ```{petk:include}
 glob: posts/**/*.md
 order_by: alphabetical_asc
@@ -202,7 +202,7 @@ order_by: random
 seed: 12345
 limit: 3
 ```
-```
+````
 
 ## 📚 Documentation
 
