@@ -11,7 +11,7 @@ const createProgram = (): Command => {
     program
         .name('petk')
         .description('Template processing toolkit with advanced features')
-        .version('0.1.0');
+        .version('0.0.0');
     
     return program;
 };

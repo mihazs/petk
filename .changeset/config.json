@@ -4,5 +4,7 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@petk/*", "@petk/docs"]
+  "ignore": ["@petk/docs","@petk/eslint-config-custom", "@petk/tsconfig"],
+  "linked": [["petk", "@petk/*"]]
+
 }

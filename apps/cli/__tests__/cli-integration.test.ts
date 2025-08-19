@@ -52,7 +52,7 @@ describe('CLI Integration Tests', () => {
             expect(program).toBeInstanceOf(Command);
             expect(program.name()).toBe('petk');
             expect(program.description()).toBe('Template processing toolkit with advanced features');
-            expect(program.version()).toBe('0.1.0');
+            expect(program.version()).toBe('0.0.0');
         });
         
         it('registers all required commands', async () => {
