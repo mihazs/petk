@@ -10,6 +10,7 @@ This file is the living source of truth for the documentation architecture of th
   /learning/         # Guides and tutorials for newcomers
   /problems/         # Solutions to common or specific problems
   /reference/        # Technical reference and API documentation
+    /deployment/     # Deployment and CI/CD infrastructure reference
   /explanation/      # Architectural decisions, concepts, and rationale
 ```
 
@@ -26,6 +27,10 @@ This file is the living source of truth for the documentation architecture of th
 - **reference/**
   *Purpose:* Information-oriented technical reference for APIs, configuration, and commands.
   *Examples:* "CLI Command Reference", "Configuration Options", "Utility Function Index", "ESLint Configuration Reference".
+  
+  - **reference/deployment/**
+    *Purpose:* Technical reference for deployment infrastructure, CI/CD workflows, and automation.
+    *Examples:* "GitHub Actions Workflows", "Deployment Configuration", "Build Process Reference", "Infrastructure Setup".
 
 - **explanation/**
   *Purpose:* Understanding-oriented documentation for concepts, architecture, and decisions.
@@ -44,5 +49,6 @@ This file is the living source of truth for the documentation architecture of th
 - Users troubleshooting should look in `/docs/problems/`.
 - Developers needing technical details should use `/docs/reference/`.
 - Contributors or advanced users seeking architectural context should use `/docs/explanation/`.
+- Infrastructure and deployment information should be found in `/docs/reference/deployment/`.
 
 ---
