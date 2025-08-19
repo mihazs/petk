@@ -15,10 +15,10 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://mihazs.github.io',
+  url: 'https://petk.dev',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/petk/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -64,14 +64,14 @@ const config: Config = {
       tagName: 'meta',
       attributes: {
         property: 'og:url',
-        content: 'https://mihazs.github.io/petk/',
+        content: 'https://petk.dev/',
       },
     },
     {
       tagName: 'meta',
       attributes: {
         property: 'og:image',
-        content: 'https://mihazs.github.io/petk/img/petk-social-card.jpg',
+        content: 'https://petk.dev/img/petk-social-card.jpg',
       },
     },
     // Twitter Card tags
@@ -100,7 +100,7 @@ const config: Config = {
       tagName: 'meta',
       attributes: {
         name: 'twitter:image',
-        content: 'https://mihazs.github.io/petk/img/petk-social-card.jpg',
+        content: 'https://petk.dev/petk/img/petk-social-card.jpg',
       },
     },
     // Additional meta tags
