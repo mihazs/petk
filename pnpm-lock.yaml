@@ -23,6 +23,9 @@ importers:
 
   apps/cli:
     dependencies:
+      '@petk/converter':
+        specifier: workspace:*
+        version: link:../../packages/converter
       '@types/js-yaml':
         specifier: ^4.0.9
         version: 4.0.9
@@ -50,7 +53,17 @@ importers:
         version: 3.2.4(@types/node@24.3.0)(tsx@4.20.4)
 
   packages/converter:
+    dependencies:
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.0
+      marked:
+        specifier: ^16.2.0
+        version: 16.2.0
     devDependencies:
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
       eslint:
         specifier: ^8.56.0
         version: 8.57.1
@@ -1416,6 +1429,11 @@ packages:
   make-dir@4.0.0:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
+
+  marked@16.2.0:
+    resolution: {integrity: sha512-LbbTuye+0dWRz2TS9KJ7wsnD4KAtpj0MVkWc90XvBa6AslXsT0hTBVH5k32pcSyHH1fst9XEFJunXHktVy0zlg==}
+    engines: {node: '>= 20'}
+    hasBin: true
 
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
@@ -3299,6 +3317,8 @@ snapshots:
   make-dir@4.0.0:
     dependencies:
       semver: 7.7.2
+
+  marked@16.2.0: {}
 
   merge-stream@2.0.0: {}
 

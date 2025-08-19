@@ -3,6 +3,7 @@
 import { Command } from 'commander';
 import { GlobalOptions } from './types.js';
 import { validateCommand } from './commands/validate-command.js';
+import { convertCommand, displayConvertResult } from './commands/convert-command.js';
 
 const createProgram = (): Command => {
     const program = new Command();
@@ -70,15 +71,15 @@ const addConvertCommand = (program: Command): Command => {
         .option('--eval', 'evaluate expressions in content', false)
         .action(async (input: string, options: any) => {
             const globalOptions = extractGlobalOptions(program.opts());
-            const convertOptions = { 
-                ...globalOptions, 
-                output: options.output, 
+            const convertOptions = {
+                ...globalOptions,
+                output: options.output,
                 format: options.format,
-                eval: options.eval 
+                eval: options.eval
             };
             
-            console.log('Convert command:', { input, options: convertOptions });
-            console.log('Convert functionality will be implemented in Phase 4');
+            const result = await convertCommand(input, convertOptions);
+            displayConvertResult(result);
         });
 };
 

@@ -1,0 +1,169 @@
+metadata:
+  title: Test Document
+  createdAt: '2025-08-19T01:39:06.632Z'
+  modifiedAt: '2025-08-19T01:39:06.632Z'
+  source:
+    filename: test-sample.md
+    path: test-sample.md
+    size: 0
+    encoding: utf-8
+  parsing:
+    parser: marked
+    version: 16.2.0
+    timestamp: '2025-08-19T01:39:06.632Z'
+    options: {}
+  statistics:
+    totalLines: 0
+    contentItems: 12
+    wordCount: 34
+    characterCount: 254
+    multimodalItems: 0
+content:
+  - id: heading_0
+    type: heading
+    order: 0
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    level: 1
+    text: Test Document
+    anchor: test-document
+  - id: paragraph_1
+    type: paragraph
+    order: 1
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    text: This is a test document for the Petk converter.
+  - id: heading_2
+    type: heading
+    order: 2
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    level: 2
+    text: Introduction
+    anchor: introduction
+  - id: paragraph_3
+    type: paragraph
+    order: 3
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    text: Here's some content with **bold text** and *italic text*.
+  - id: heading_4
+    type: heading
+    order: 4
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    level: 3
+    text: Features
+    anchor: features
+  - id: list_5
+    type: list
+    order: 5
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    listType: unordered
+    items:
+      - Support for headings
+      - Support for lists
+      - Support for formatting
+  - id: heading_6
+    type: heading
+    order: 6
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    level: 2
+    text: Images
+    anchor: images
+  - id: paragraph_7
+    type: paragraph
+    order: 7
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    text: '![Alt text](example.jpg "Image title")'
+  - id: heading_8
+    type: heading
+    order: 8
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    level: 2
+    text: Code
+    anchor: code
+  - id: code_block_9
+    type: code_block
+    order: 9
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    language: javascript
+    code: console.log("Hello, world!");
+    highlighted: false
+  - id: heading_10
+    type: heading
+    order: 10
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    level: 2
+    text: Links
+    anchor: links
+  - id: paragraph_11
+    type: paragraph
+    order: 11
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    text: Visit [Petk](https://github.com/petk/petk) for more information.
+structure:
+  headings:
+    - id: heading_0
+      level: 1
+      text: Test Document
+      order: 0
+      children: []
+    - id: heading_2
+      level: 2
+      text: Introduction
+      order: 2
+      children: []
+    - id: heading_4
+      level: 3
+      text: Features
+      order: 4
+      children: []
+    - id: heading_6
+      level: 2
+      text: Images
+      order: 6
+      children: []
+    - id: heading_8
+      level: 2
+      text: Code
+      order: 8
+      children: []
+    - id: heading_10
+      level: 2
+      text: Links
+      order: 10
+      children: []
+  tableOfContents:
+    - id: heading_0
+      title: Test Document
+      level: 1
+      anchor: test-document
+    - id: heading_2
+      title: Introduction
+      level: 2
+      anchor: introduction
+    - id: heading_4
+      title: Features
+      level: 3
+      anchor: features
+    - id: heading_6
+      title: Images
+      level: 2
+      anchor: images
+    - id: heading_8
+      title: Code
+      level: 2
+      anchor: code
+    - id: heading_10
+      title: Links
+      level: 2
+      anchor: links
+  multimodalAssets: []
