@@ -4,5 +4,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["packages/*", "apps/docs"]
+  "ignore": ["@petk/*", "@petk/docs"]
 }
