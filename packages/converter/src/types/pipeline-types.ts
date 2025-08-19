@@ -312,7 +312,7 @@ export function createTableCellIntermediate(
 
 export function createTableRowIntermediate(
     cells: readonly TableCellIntermediate[],
-    isHeader: boolean = false
+    isHeader = false
 ): TableRowIntermediate {
     return {
         cells,

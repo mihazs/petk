@@ -16,7 +16,7 @@ export function sampleEntries<T>(
     }
     if (mode === 'random') {
         const arr = [...items]
-        const rng = deps?.rng ?? ((i: number) => Math.random())
+        const rng = deps?.rng ?? ((_i: number) => Math.random())
         for (let i = arr.length - 1; i > 0; i--) {
             const j = Math.floor(rng(i) * (i + 1))
             const tmp = arr[i]

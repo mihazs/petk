@@ -6,12 +6,6 @@ import type { Directive } from './types'
 export type IncludeResolver = (payload: unknown, chain: readonly string[]) => { id: string; content: string }
 export type ProcessOptions = { include: IncludeResolver; vars?: Vars }
 
-function isPlainPrimitiveObject(obj: unknown): obj is Vars {
-    if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) return false
-    return Object.values(obj).every(
-        v => ['string', 'number', 'boolean'].includes(typeof v)
-    )
-}
 
 import { expandGlob } from './glob/expand-glob'
 import { normalizePaths, normalizePath } from './glob/normalize-paths'
@@ -32,8 +26,7 @@ function normalizeAndDeduplicateFiles(files: string[]): string[] {
     const result = Array.from(seen.values())
     return result
 }
-import type { GlobIncludePayload, GlobOrder, GlobSampleMode } from './types-glob'
-import util from 'util'
+import type { GlobOrder, GlobSampleMode } from './types-glob'
 
 function validateGlobIncludeOptions({
     pattern,
@@ -97,7 +90,7 @@ function normalizeGlobPattern(input: unknown): string[] {
                 }
                 // Fallback: return the parsed object
                 return obj;
-            } catch (err) {
+            } catch {
                 // Throw if the pattern looks like a malformed glob (unclosed bracket or quote)
                 if (
                     (trimmed.includes('[') && !trimmed.includes(']')) ||
@@ -113,7 +106,6 @@ function normalizeGlobPattern(input: unknown): string[] {
     }
     if (input && typeof input === 'object') {
         if ('glob' in input) {
-            // @ts-ignore
             const result = normalizeGlobPattern(input.glob);
             return result;
         }
@@ -130,7 +122,10 @@ export async function processTemplate(
     let output = input
     let localVars: Vars = options.vars ? { ...options.vars } : {}
 
-    while (true) {
+    let iterations = 0
+    const maxIterations = 1000
+    while (iterations < maxIterations) {
+        iterations++
         const directives = parseAll(output)
         if (directives.length === 0) break
 
@@ -208,9 +203,8 @@ export async function processTemplate(
                 }
                 let included = ''
                 if (isGlob) {
-                    try {
                     // Parse options from payload
-                    let pattern = globPattern
+                    const pattern = globPattern
                     let orderBy: GlobOrder = 'none'
                     let sampleMode: GlobSampleMode = 'none'
                     let sampleCount = undefined
@@ -233,7 +227,7 @@ export async function processTemplate(
                                 finalPattern = parsed.glob
                                 if (parsed.cwd) finalCwd = parsed.cwd
                             }
-                        } catch (e) {
+                        } catch {
                             // Not a JSON string, use as is
                         }
                     }
@@ -333,7 +327,7 @@ export async function processTemplate(
                             if (!orderBy || orderBy === 'none') {
                                 selectedFiles = [...selectedFiles].sort()
                             }
-                            let filesIncluded = []
+                            const filesIncluded = []
                             for (const file of selectedFiles) {
                                 const resolved = await options.include(file, chain)
                                 if (typeof resolved === 'string') {
@@ -395,9 +389,6 @@ export async function processTemplate(
                         included = contents.join('')
                         console.log('[petk-debug] included after glob:', included)
                         console.log('[DUAL-PATH-DEBUG] Second code path completed, included length:', included.length, 'content preview:', included.slice(0, 50))
-                    }
-                    } catch (err) {
-                        throw err
                     }
                 } else {
                     const resolved = options.include(payload, chain)

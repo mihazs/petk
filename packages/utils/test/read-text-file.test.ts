@@ -7,7 +7,9 @@ const tempFile = 'temp-read-text-file.txt';
 afterEach(() => {
     try {
         fs.unlinkSync(tempFile);
-    } catch {}
+    } catch {
+        // Ignore cleanup errors
+    }
 });
 
 describe('readTextFile', () => {

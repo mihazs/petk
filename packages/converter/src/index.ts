@@ -6,7 +6,6 @@ import type {
     ConversionResult,
     MarkdownToYamlOutput,
     ConversionError,
-    YamlOutput,
     ContentItem
 } from './types.js';
 
@@ -262,7 +261,7 @@ const extractMultimodalAssets = (contentItems: ContentItem[]): any[] => {
         }));
 };
 
-export const createConverter = (sourceFilename: string = 'unknown.md'): MarkdownToYamlConverter => {
+export const createConverter = (sourceFilename = 'unknown.md'): MarkdownToYamlConverter => {
     return {
         convert: async (markdownContent: string, options?: ConversionOptions): Promise<ConversionResult> => {
             const mergedOptions = mergeOptions(options);
@@ -279,8 +278,8 @@ export const createConverter = (sourceFilename: string = 'unknown.md'): Markdown
 };
 
 export const convertMarkdown = async (
-    markdownContent: string, 
-    sourceFilename: string = 'unknown.md',
+    markdownContent: string,
+    sourceFilename = 'unknown.md',
     options?: ConversionOptions
 ): Promise<ConversionResult> => {
     const converter = createConverter(sourceFilename);
@@ -288,8 +287,8 @@ export const convertMarkdown = async (
 };
 
 export const convertMarkdownSync = (
-    markdownContent: string, 
-    sourceFilename: string = 'unknown.md',
+    markdownContent: string,
+    sourceFilename = 'unknown.md',
     options?: ConversionOptions
 ): ConversionResult => {
     const converter = createConverter(sourceFilename);

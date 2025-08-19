@@ -8,7 +8,9 @@ const filePath = process.cwd() + '/' + tempFile
 afterEach(() => {
     try {
         fs.unlinkSync(filePath)
-    } catch {}
+    } catch {
+        // Ignore cleanup errors
+    }
 })
 
 describe('writeTextFile', () => {

@@ -1,5 +1,5 @@
 import type { Token } from 'marked';
-import type { MultimodalContent, ImageItem, AudioItem, VideoItem } from '../types.js';
+// Note: Types are defined locally in this file - removed unused imports
 
 export interface MultimodalDetectionResult {
     isMultimodal: boolean;

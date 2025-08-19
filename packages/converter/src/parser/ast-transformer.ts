@@ -52,7 +52,7 @@ const generateContentItemId = (context: TransformContext, type: string): string 
     return id;
 };
 
-const getSourceLines = (token: Token): { start: number; end: number } => {
+const getSourceLines = (_token: Token): { start: number; end: number } => {
     return { start: 1, end: 1 };
 };
 

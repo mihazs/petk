@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mkdtemp, writeFile, rm, readFile } from 'fs/promises'
 import { tmpdir } from 'os'
-import { join } from 'path'
+import { join, basename } from 'path'
 import { processTemplate, IncludeResolver, ProcessOptions } from '../src/resolve-recursive'
 
 const makeResolver = (map: Record<string, { id: string; content: string }>): IncludeResolver =>
@@ -58,7 +58,6 @@ describe('processTemplate', () => {
         return map
     }
     
-    const path = require('path');
     const fileResolver = (fileMap: Record<string, string>) => (payload: any) => {
         // Debug log for payload
         // eslint-disable-next-line no-console
@@ -72,7 +71,7 @@ describe('processTemplate', () => {
                 console.log('[fileResolver] matched direct:', payload)
                 return { id: payload, content: fileMap[payload] }
             }
-            const base = path.basename(payload);
+            const base = basename(payload);
             if (base in fileMap) {
                 // eslint-disable-next-line no-console
                 console.log('[fileResolver] matched basename:', base)
@@ -91,7 +90,7 @@ describe('processTemplate', () => {
                 if (p in fileMap) {
                     return { id: p, content: fileMap[p] }
                 }
-                const base = path.basename(p)
+                const base = basename(p)
                 if (base in fileMap) {
                     return { id: base, content: fileMap[base] }
                 }
@@ -214,8 +213,8 @@ describe('processTemplate', () => {
             // Debug: print fileMap keys and output
             console.log('DEBUG fileMap keys:', Object.keys(fileMap))
             console.log('DEBUG output:', out)
-216.1 |             console.log('DEBUG A1 matches:', out.match(/A1/g))
-216.2 |             console.log('DEBUG A2 matches:', out.match(/A2/g))
+            console.log('DEBUG A1 matches:', out.match(/A1/g))
+            console.log('DEBUG A2 matches:', out.match(/A2/g))
             // Should only include each file once
             expect(out.match(/A1/g)?.length).toBe(1)
             expect(out.match(/A2/g)?.length).toBe(1)
