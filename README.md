@@ -1,18 +1,70 @@
+<!-- 
+SEO Metadata:
+Page Title: Petk - Advanced CLI Toolkit for Prompt Engineering | Template Engine & Content Assembly
+Meta Description: Professional CLI toolkit for LLM prompt engineering. Advanced templating, content assembly, and Markdown-to-YAML conversion for AI workflows.
+Keywords: prompt engineering, CLI toolkit, template engine, LLM tools, markdown to yaml, AI development, content assembly, prompt templates
+Open Graph Title: Petk - Professional Prompt Engineering CLI Toolkit
+Open Graph Description: Build, manage, and optimize prompts for Large Language Models with advanced templating and content assembly capabilities.
+-->
+
 <div align="center">
 <img src="./logo.svg" alt="Petk Logo" width="200" height="200">
 <h1>Petk 🏸</h1>
+
+[![Build Status](https://img.shields.io/github/actions/workflow/status/mihazs/petk/ci.yml?branch=main)](https://github.com/mihazs/petk/actions)
+[![NPM Version](https://img.shields.io/npm/v/petk?color=blue)](https://www.npmjs.com/package/petk)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+[![Documentation](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://petk.dev/docs)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+
+**Professional CLI toolkit for prompt engineering that enables systematic creation, management, and optimization of prompts for Large Language Models with advanced templating capabilities.**
+
+[🚀 Get Started](#-installation) • [https://petk.dev/docs 📖 Documentation](https://petk.dev/docs) • [🎯 Examples](#-example-building-a-modular-prompt-system) • [🏗️ Architecture](#-project-structure)
+
 </div>
 
-**Petk** is a comprehensive CLI toolkit for prompt engineering that enables systematic creation, management, and optimization of prompts for Large Language Models (LLMs). Built for professional AI development workflows, Petk provides advanced templating, content assembly, and conversion capabilities.
+## 📑 Table of Contents
 
-## 🚀 Quick Start
+- [🚀 Installation](#-installation)
+- [⚡ Quick Start](#-quick-start)
+- [⭐ Core Features](#-core-features)
+- [📖 CLI Commands](#-cli-commands)  
+- [💡 Example: Building a Modular Prompt System](#-example-building-a-modular-prompt-system)
+- [🛠️ Advanced Template Syntax](#-advanced-template-syntax)
+- [📚 Documentation](#-documentation)
+- [🎯 Why Petk for Prompt Engineering?](#-why-petk-for-prompt-engineering)
+- [🏗️ Project Structure](#-project-structure)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+
+## 🚀 Installation
+
+Install Petk using your preferred package manager:
 
 ```bash
-# Install Petk globally
-npm install -g @petk/cli
+# Using npm
+npm install -g petk
 
+# Using pnpm (recommended)
+pnpm add -g petk
+
+# Using yarn
+yarn global add petk
+```
+
+## ⚡ Quick Start
+
+Create your first template and process it in minutes:
+
+```bash
 # Create your first template
-echo '# Hello {{name}}!\n\n<!--{ include: "examples/*.md" }-->' > greeting.md
+echo '# Hello {{name}}!
+
+```{petk:include}
+path: examples/greeting.md
+```
+
+Welcome to prompt engineering!' > greeting.md
 
 # Process the template
 petk process greeting.md --name "World"
@@ -24,10 +76,10 @@ petk convert greeting.md --to yaml
 ## ⭐ Core Features
 
 ### 🧩 **Advanced Template Engine**
-- **Conditional Logic:** `<!--{ if: "condition" }-->` blocks for dynamic content
-- **Variable Substitution:** `{{variable}}` syntax with nested object support
-- **File Inclusion:** Powerful `<!--{ include: "pattern" }-->` directives
-- **Glob Patterns:** Advanced file matching with sorting and filtering
+- **Conditional Logic:** Dynamic content with intelligent processing
+- **Variable Substitution:** `{{variable}}` syntax with nested object support  
+- **File Inclusion:** Powerful file embedding with `{petk:include}` directive blocks
+- **Glob Patterns:** Advanced file matching with sorting and filtering capabilities
 - **Recursive Resolution:** Templates can include other templates seamlessly
 
 ### 📁 **Intelligent Content Assembly**
@@ -48,7 +100,7 @@ petk convert greeting.md --to yaml
 - **Configuration Management:** Project-wide settings and path aliases
 - **Performance Optimized:** Fast processing of large template collections
 
-## 📖 Commands
+## 📖 CLI Commands
 
 | Command | Purpose | Example |
 |---------|---------|---------|
@@ -61,47 +113,53 @@ petk convert greeting.md --to yaml
 ## 💡 Example: Building a Modular Prompt System
 
 **1. Create a base template (`base-prompt.md`):**
+
 ```markdown
 # AI Assistant Instructions
 
 You are a helpful AI assistant specialized in {{domain}}.
 
 ## Available Tools
-<!--{ include: "tools/*.md", order_by: "alphabetical_asc" }-->
+
+```{petk:include}
+glob: tools/**/*.md
+order_by: alphabetical_asc
+```
+
+## Context Guidelines
+
+```{petk:include}
+path: shared/guidelines.md
+```
 
 ## Examples
-```markdown
+
 ```{petk:include}
-path: shared/header.md
-```
+glob: examples/{{domain}}/*.md
+limit: 3
+order_by: last_updated_desc
 ```
 ```
 
 **2. Process with variables:**
+
 ```bash
 petk process base-prompt.md \
   --domain "software-engineering" \
-  --task_type "debugging" \
-  --include_guidelines true \
   --output final-prompt.md
 ```
 
 **3. Convert for API usage:**
+
 ```bash
 petk convert final-prompt.md --to yaml --output prompt-config.yaml
 ```
 
-## 🛠️ Advanced Features
-
-### Template Syntax Reference
-
-Petk uses a powerful template engine that processes Markdown files with embedded directives. The engine supports variable substitution, file inclusion, conditional logic, loops, and advanced file globbing patterns.
-
-## Basic Syntax
+## 🛠️ Advanced Template Syntax
 
 ### Variable Substitution
 
-Variables are enclosed in double curly braces and can be simple values or nested objects:
+Variables are enclosed in double curly braces and support nested objects:
 
 ```markdown
 # Welcome to {{site.title}}
@@ -110,51 +168,15 @@ This project is maintained by {{author.name}} ({{author.email}}).
 Current version: {{version}}
 ```
 
-**Configuration Example:**
-```javascript
-// petk.config.js
-module.exports = {
-  engine: {
-    variables: {
-      site: {
-        title: "My Project",
-        url: "https://example.com"
-      },
-      author: {
-        name: "John Doe",
-        email: "john@example.com"
-      },
-      version: "1.0.0"
-    }
-  }
-};
-```
+### Directive Blocks
 
-## Directive Blocks
-
-Directives are embedded in markdown code blocks using YAML syntax:
-
-```markdown
-```{petk:include}
-path: shared/header.md
-```
-```
-
-### Include Directive
-
-The most powerful feature for embedding content from other files.
+Directives use fenced code blocks with YAML syntax:
 
 #### Basic File Inclusion
 
 ```markdown
 ```{petk:include}
 path: shared/header.md
-```
-
-```{petk:include}
-path: templates/card.md
-title: My Card
-content: Card description
 ```
 ```
 
@@ -184,11 +206,11 @@ limit: 3
 
 ## 📚 Documentation
 
-- **[Getting Started Guide](https://petk.dev/learning/getting-started)** - Installation and first steps
-- **[Template Syntax Reference](https://petk.dev/reference/template-syntax)** - Complete syntax documentation
-- **[CLI Reference](https://petk.dev/reference/cli)** - All commands and options
-- **[Use Cases & Examples](https://petk.dev/problems/use-cases)** - Real-world prompt engineering scenarios
-- **[Architecture Overview](https://petk.dev/explanation/architecture)** - System design and components
+- **[Getting Started Guide](https://petk.dev/docs/learning/getting-started)** - Installation and first steps
+- **[Template Syntax Reference](https://petk.dev/docs/reference/template-syntax)** - Complete syntax documentation  
+- **[CLI Reference](https://petk.dev/docs/reference/cli)** - All commands and options
+- **[Use Cases & Examples](https://petk.dev/docs/problems/use-cases)** - Real-world prompt engineering scenarios
+- **[Architecture Overview](https://petk.dev/docs/explanation/architecture)** - System design and components
 
 ## 🎯 Why Petk for Prompt Engineering?
 
@@ -222,10 +244,22 @@ petk/
 └── docs/              # Documentation source
 ```
 
-## Contributing
+## 🤝 Contributing
 
-Contributions are welcome\! Please read our `CONTRIBUTING.md` guide for details on the development process, coding conventions, and how to submit pull requests. This project follows the [Conventional Commits](https://www.conventionalcommits.org/) specification.
+Contributions are welcome! Please read our `CONTRIBUTING.md` guide for details on the development process, coding conventions, and how to submit pull requests. This project follows the [Conventional Commits](https://www.conventionalcommits.org/) specification.
 
-## License
+**Ready to contribute?** [📖 Read our Contributing Guide](https://petk.dev/docs/explanation/contributing) and [🚀 Get started with development](https://petk.dev/docs/learning/development-setup).
+
+## 📄 License
 
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+
+---
+
+<div align="center">
+
+**[🚀 Get Started](#-installation)** • **[https://petk.dev/docs 📖 View Documentation](https://petk.dev/docs)** • **[🐛 Report Issues](https://github.com/mihazs/petk/issues)**
+
+Made with ❤️ for the AI development community
+
+</div>
