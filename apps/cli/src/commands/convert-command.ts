@@ -270,5 +270,5 @@ export const displayConvertResult = (result: ConvertResult): void => {
         process.stderr.write(`❌ ${result.message}\n`);
     }
     
-    process.stdout.write(`⏱️  Duration: ${result.duration}ms\n`);
+    console.log(`⏱️  Duration: ${result.duration}ms`);
 };

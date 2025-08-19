@@ -232,7 +232,7 @@ describe('Variable Parser Tests', () => {
 
         it('should validate variable value types', () => {
             // Arrange
-            const variables = { name: 'John', count: '42' };
+            const variables = { name: 'John', count: 42 as any };
             
             // Act
             const result = validateVariables(variables);

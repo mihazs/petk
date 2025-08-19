@@ -63,7 +63,7 @@ const addBuildCommand = (program: Command): Command => {
             const globalOptions = extractGlobalOptions(program.opts() as CommanderGlobalOptions);
             const buildOptions = { ...globalOptions, output: options.output, optimize: options.optimize };
             
-            process.stdout.write(`Build command: ${JSON.stringify({ input, options: buildOptions })}\n`);
+            console.log('Build command:', { input, options: buildOptions });
             process.stdout.write('Build functionality will be implemented with @petk/engine integration\n');
         });
 };
@@ -108,7 +108,7 @@ const addOptimizeCommand = (program: Command): Command => {
                 iterations: parseInt(options.iterations || '3', 10)
             };
             
-            process.stdout.write(`Optimize command: ${JSON.stringify({ input, options: optimizeOptions })}\n`);
+            console.log('Optimize command:', { input, options: optimizeOptions });
             process.stdout.write('Optimization functionality will be implemented in Phase 5\n');
         });
 };
