@@ -96,8 +96,8 @@ jobs:
         env:
           NODE_ENV: production
           # GitHub Pages specific configurations
-          DOCUSAURUS_URL: https://mihazs.github.io
-          DOCUSAURUS_BASE_URL: /petk/
+          DOCUSAURUS_URL: https://petk.dev
+          DOCUSAURUS_BASE_URL: /
 
       # Step 9: Setup Pages
       - name: Setup GitHub Pages
@@ -133,7 +133,7 @@ jobs:
         run: |
           if [ "${{ needs.build.result }}" == "success" ] && [ "${{ needs.deploy.result }}" == "success" ]; then
             echo "✅ Documentation successfully deployed to GitHub Pages"
-            echo "📍 URL: https://mihazs.github.io/petk/"
+            echo "📍 URL: https://petk.dev/"
             exit 0
           else
             echo "❌ Documentation deployment failed"
@@ -144,4 +144,4 @@ jobs:
 
 # Workflow metadata for status badges
 # To add a status badge to your README:
-# [![Deploy Docs](https://github.com/mihazs/petk/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/mihazs/petk/actions/workflows/deploy-docs.yml)
+# [![Deploy Docs](https://github.com/mihazs/petk/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/mihazs/actions/workflows/deploy-docs.yml)

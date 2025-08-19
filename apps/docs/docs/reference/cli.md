@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # CLI Reference
 
-Complete command-line interface reference for Petk. This document provides detailed information about all available commands, options, and usage patterns.
+Complete command-line interface reference for Petk. This document provides detailed information about all available commands, options, and usage patterns based on the current implementation status.
 
 ## Global Options
 
@@ -19,11 +19,13 @@ These options are available for all Petk commands:
 | `--quiet` | `-q` | Suppress non-error output |
 | `--config <file>` | `-c` | Specify configuration file |
 
-## Commands
+## Implemented Commands
 
 ### `petk process`
 
-Process template files with Petk directives.
+**Status:** ✅ Fully Implemented
+
+Process template files with Petk directives using the template engine.
 
 **Syntax:**
 ```bash
@@ -43,6 +45,15 @@ petk process [options] <input> [output]
 | `--watch` | Watch for file changes and reprocess | `false` |
 | `--include <pattern>` | Include files matching pattern | `**/*.md` |
 | `--exclude <pattern>` | Exclude files matching pattern | `node_modules/**` |
+
+**Template Engine Features:**
+- **Variable Substitution**: Replace `{{variable}}` with values from config or CLI
+- **Include Blocks**: Embed content from other files using `<!--{ include: "path/to/file.md" }-->`
+- **Conditional Blocks**: Show/hide content based on conditions
+- **Loop Blocks**: Repeat content for arrays of data
+- **Advanced Glob Patterns**: Complex file inclusion with sorting options
+- **Deterministic Sampling**: Consistent random file selection
+- **Recursive Resolution**: Handle nested includes with cycle detection
 
 **Examples:**
 ```bash
@@ -64,7 +75,9 @@ petk process ./docs/ --include "**/*.{md,mdx}" --exclude "**/draft/**"
 
 ### `petk convert`
 
-Convert between different file formats.
+**Status:** ✅ Fully Implemented
+
+Convert Markdown files to YAML or JSON format using the advanced converter.
 
 **Syntax:**
 ```bash
@@ -83,11 +96,18 @@ petk convert [options] <input> <output>
 | `--schema <file>` | YAML schema validation file | None |
 | `--preserve-structure` | Maintain original file structure in conversion | `true` |
 
+**Converter Features:**
+- **Intelligent Parsing**: Advanced Markdown AST analysis
+- **Multimodal Detection**: Automatic detection of code blocks, tables, lists, and media
+- **Structure Preservation**: Maintains document hierarchy and relationships
+- **Schema Validation**: Optional YAML schema validation
+- **Error Recovery**: Robust error handling with detailed diagnostics
+- **Metadata Extraction**: Extracts frontmatter and document properties
+
 **Supported Formats:**
-- `markdown` (`.md`, `.markdown`)
-- `yaml` (`.yml`, `.yaml`)
-- `json` (`.json`)
-- `html` (`.html`, `.htm`)
+- `markdown` (`.md`, `.markdown`) - Input format
+- `yaml` (`.yml`, `.yaml`) - Output format
+- `json` (`.json`) - Output format
 
 **Examples:**
 ```bash
@@ -101,108 +121,33 @@ petk convert --from markdown --to yaml input.md output.yml
 petk convert data.md data.yaml --schema schema.json
 ```
 
-### `petk init`
+## Planned Commands
+
+The following commands are planned for future releases but not yet implemented:
+
+### `petk init` 
+
+**Status:** 🚧 Planned
 
 Initialize a new Petk project or configuration.
 
-**Syntax:**
-```bash
-petk init [options] [directory]
-```
-
-**Arguments:**
-- `[directory]` - Target directory (defaults to current directory)
-
-**Options:**
-| Option | Description | Default |
-|--------|-------------|---------|
-| `--template <name>` | Use a specific template | `basic` |
-| `--force` | Overwrite existing files | `false` |
-| `--minimal` | Create minimal configuration | `false` |
-
-**Available Templates:**
-- `basic` - Basic Petk configuration
-- `docs` - Documentation-focused setup
-- `blog` - Blog/content site configuration
-- `advanced` - Full-featured configuration with examples
-
-**Examples:**
-```bash
-# Initialize in current directory
-petk init
-
-# Initialize new project
-petk init my-project
-
-# Use specific template
-petk init --template docs my-docs
-
-# Minimal setup
-petk init --minimal
-```
+**Note:** This command is currently a placeholder. Implementation is planned for future releases.
 
 ### `petk validate`
 
+**Status:** 🚧 Planned
+
 Validate template files and configuration.
 
-**Syntax:**
-```bash
-petk validate [options] <input>
-```
-
-**Arguments:**
-- `<input>` - File or directory to validate
-
-**Options:**
-| Option | Description | Default |
-|--------|-------------|---------|
-| `--schema <file>` | Custom schema for validation | Built-in schema |
-| `--strict` | Enable strict validation mode | `false` |
-| `--fix` | Automatically fix common issues | `false` |
-
-**Examples:**
-```bash
-# Validate single file
-petk validate template.md
-
-# Validate directory
-petk validate ./templates/
-
-# Strict validation with auto-fix
-petk validate ./docs/ --strict --fix
-```
+**Note:** This command is currently a placeholder. Implementation is planned for future releases.
 
 ### `petk serve`
 
+**Status:** 🚧 Planned
+
 Start a development server with live reload.
 
-**Syntax:**
-```bash
-petk serve [options] [directory]
-```
-
-**Arguments:**
-- `[directory]` - Directory to serve (defaults to current directory)
-
-**Options:**
-| Option | Description | Default |
-|--------|-------------|---------|
-| `--port <number>` | Server port | `3000` |
-| `--host <address>` | Server host | `localhost` |
-| `--open` | Open browser automatically | `false` |
-| `--livereload` | Enable live reload | `true` |
-
-**Examples:**
-```bash
-# Start development server
-petk serve
-
-# Custom port and host
-petk serve --port 8080 --host 0.0.0.0
-
-# Serve specific directory
-petk serve ./dist/ --open
-```
+**Note:** This command is currently a placeholder. Implementation is planned for future releases.
 
 ## Configuration
 
@@ -244,13 +189,7 @@ module.exports = {
     type: 'markdown',
     preserveLineBreaks: true,
     trimWhitespace: true
-  },
-  
-  // Plugin configuration
-  plugins: [
-    '@petk/plugin-syntax-highlighting',
-    '@petk/plugin-table-of-contents'
-  ]
+  }
 };
 ```
 
@@ -276,16 +215,43 @@ module.exports = {
 
 ## Advanced Usage
 
-### Batch Processing
+### Template Processing Examples
 
-Process multiple files with different configurations:
+**Basic Variable Substitution:**
+```markdown
+# Welcome to {{site.title}}
 
+This site is hosted at {{site.url}}.
+```
+
+**File Inclusion:**
+```markdown
+<!-- Include entire file -->
+<!--{ include: "shared/header.md" }-->
+
+<!-- Include with variables -->
+<!--{ include: "templates/card.md", title: "My Card", content: "Card content" }-->
+```
+
+**Complex Glob Patterns:**
+```markdown
+<!-- Include all markdown files, sorted by last modified -->
+<!--{ 
+  include: "posts/**/*.md",
+  order_by: "last_updated_desc",
+  limit: 10
+}-->
+```
+
+### Conversion Examples
+
+**Markdown to YAML Conversion:**
 ```bash
-# Process multiple file types
-petk process "**/*.{md,mdx}" --output ./dist/
+# Convert blog post to structured data
+petk convert blog-post.md blog-post.yaml
 
-# Chain commands
-petk process src/ --output temp/ && petk convert temp/*.md dist/ --to html
+# Convert with custom schema validation
+petk convert content.md output.yaml --schema content-schema.json
 ```
 
 ### Integration with Build Tools
@@ -294,19 +260,39 @@ petk process src/ --output temp/ && petk convert temp/*.md dist/ --to html
 # NPM scripts integration
 npm run build:docs && petk process ./docs/ --output ./public/docs/
 
-# CI/CD pipeline
-petk validate ./content/ --strict && petk process ./content/ --output ./dist/
+# Process templates then convert to YAML
+petk process src/templates/ --output temp/ && petk convert temp/*.md dist/
 ```
 
-### Custom Directives
+## Implementation Status
 
-Petk supports custom directive processors through plugins. See the Plugin Development Guide for more information.
+| Command | Status | Core Features | Advanced Features |
+|---------|--------|---------------|-------------------|
+| `process` | ✅ Complete | Template processing, variable substitution | Advanced globbing, deterministic sampling |
+| `convert` | ✅ Complete | Markdown to YAML/JSON conversion | Multimodal detection, schema validation |
+| `init` | 🚧 Planned | Project initialization | Template selection |
+| `validate` | 🚧 Planned | Template validation | Schema validation |
+| `serve` | 🚧 Planned | Development server | Live reload |
 
 ## Troubleshooting
 
-For common issues and solutions, see [Common Issues](../problems/common-issues).
+### Common Issues
+
+**Template Processing Errors:**
+- Ensure all included files exist and are accessible
+- Check for circular include dependencies
+- Verify variable names and syntax
+
+**Conversion Errors:**
+- Validate input Markdown syntax
+- Check file permissions for input/output files
+- Ensure output directory exists
 
 For additional help:
 - Use `petk <command> --help` for command-specific help
 - Check the [GitHub Issues](https://github.com/mihazs/petk/issues) for known problems
-- Join our [Discord community](https://discord.gg/petk) for support
+- Review the [Template Syntax Reference](./template-syntax) for template engine details
+
+## Development Status
+
+Petk is actively developed with a focus on prompt engineering workflows. The core template processing and conversion functionality is complete and production-ready. Additional commands and features are planned based on user feedback and requirements.

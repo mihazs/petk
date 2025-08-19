@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Welcome to Petk Documentation
 
-**Petk** is a powerful template toolkit designed for modern development workflows. This documentation follows the Diátaxis framework to help you find exactly what you need, when you need it.
+**Petk** is a comprehensive CLI toolkit designed specifically for prompt engineering workflows and template-driven content management. This documentation follows the Diátaxis framework to help you find exactly what you need, when you need it.
 
 ## Getting Started
 
@@ -24,12 +24,33 @@ Want to understand the concepts and design decisions behind Petk? Explore our [E
 
 ## What is Petk?
 
-Petk is a template toolkit that provides:
+Petk is a prompt engineering toolkit that provides:
 
-- **Template Engine**: Powerful templating with dynamic content inclusion
-- **Markdown-to-YAML Converter**: Transform documentation into structured data
-- **CLI Tools**: Command-line interface for easy integration
-- **Monorepo Architecture**: Clean, maintainable codebase structure
+- **Advanced Template Engine**: Dynamic content inclusion with glob patterns, variable substitution, recursive processing, and cycle detection
+- **Markdown-to-YAML Converter**: Transform documentation into structured data with multimodal content support and rich document analysis
+- **CLI Tools**: Complete command-line interface for template processing, validation, conversion, and watch mode development
+- **Monorepo Architecture**: Clean, maintainable TypeScript codebase with modular package structure
+
+## Key Capabilities
+
+### Template Processing
+- Complex include blocks with YAML configuration
+- Glob pattern matching with multiple sorting options (alphabetical, last updated)
+- Deterministic content sampling and depth limit controls
+- Variable substitution with recursive resolution
+- Comprehensive cycle detection and error handling
+
+### Content Conversion
+- Markdown to YAML transformation with AST processing
+- Multimodal content detection and handling
+- Rich document structure analysis
+- Robust error reporting and recovery
+
+### Development Integration
+- Watch mode for real-time template processing
+- Template validation and error reporting
+- Project initialization and configuration management
+- Seamless integration with modern development workflows
 
 ## Navigation Guide
 
