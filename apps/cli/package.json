@@ -1,20 +1,50 @@
 {
     "name": "petk",
     "version": "0.1.0",
-    "private": true,
+    "description": "A powerful toolkit for processing and converting templates with advanced file inclusion capabilities",
     "type": "module",
     "main": "dist/index.js",
     "bin": {
         "petk": "dist/index.js"
     },
+    "files": [
+        "dist/**/*",
+        "README.md",
+        "LICENSE"
+    ],
     "scripts": {
         "dev": "tsx --watch src/index.ts",
         "build": "swc src -d dist --source-maps",
         "test": "vitest run",
         "lint": "eslint .",
-        "start": "node dist/index.js"
+        "start": "node dist/index.js",
+        "prepare": "pnpm build"
     },
+    "keywords": [
+        "template",
+        "converter",
+        "markdown",
+        "yaml",
+        "cli",
+        "tool",
+        "file-processing"
+    ],
+    "author": "Petk Contributors",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mihazs/petk.git"
+    },
+    "homepage": "https://github.com/mihazs/petk#readme",
+    "bugs": {
+        "url": "https://github.com/mihazs/petk/issues"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
     "dependencies": {
         "@petk/converter": "workspace:*",
         "@types/js-yaml": "^4.0.9",

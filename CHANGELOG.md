@@ -2,6 +2,48 @@
 
 <!-- LLM_INSERT_CHANGELOG_HERE -->
 
+## [2025-08-19 04:24:15] Docusaurus Documentation Site Implementation
+
+- **Type:** Added
+- **Docs:** apps/docs/ (complete Docusaurus site), apps/docs/docs/ (Diátaxis structure), apps/docs/docusaurus.config.ts, apps/docs/sidebars.ts
+- **Architecture:** Integrated Docusaurus 3.x within Turborepo monorepo structure with TypeScript support
+- **Summary:**
+  Complete implementation of a Docusaurus v3.x documentation site within the Petk monorepo, following the Diátaxis framework for content organization and integrating with existing project architecture.
+  
+  ### Added
+   - Docusaurus 3.x site with full TypeScript integration in apps/docs directory
+   - Diátaxis framework implementation with four foundational documentation types (Learning, Problem-Solving, Information, Understanding)
+   - Local search functionality using @easyops-cn/docusaurus-search-local plugin
+   - Dark mode support and responsive design configuration
+   - Turborepo integration for monorepo build system compatibility
+   - Comprehensive sidebar navigation reflecting Diátaxis structure
+   - Development and production build scripts
+   - Content integration preserving existing /docs structure
+   - TypeScript compilation and error-free build process
+   - Placeholder content files for each documentation category
+   - Proper kebab-case naming conventions throughout
+   - Integration with existing pnpm workspace configuration
+
+  ### Fixed
+   - Broken links in initial Docusaurus content preventing build completion
+   - Sidebar configuration alignment with Docusaurus navigation requirements
+   - Content file structure matching sidebar definitions
+
+  ### Changed
+   - Updated turbo.json to include apps/docs in build pipeline
+   - Enhanced root package.json and pnpm-workspace.yaml for docs app support
+   - Configured Docusaurus with project-specific metadata and branding
+
+  ### Verified
+   - Development server starts successfully (http://localhost:3000/petk/)
+   - Production build completes without errors
+   - Turborepo integration working correctly (docs included in monorepo builds)
+   - TypeScript compilation successful across all components
+   - Search functionality plugin properly installed and configured
+   - Responsive design and dark mode features enabled
+
+   ----
+
 ## [2025-08-18 21:00:36] Phase 3 Complete - CLI Implementation with Validation and Testing
 
 - **Type:** Added
