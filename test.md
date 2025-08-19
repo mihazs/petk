@@ -1,18 +1,6 @@
-# Test Document
+# Test Markdown
 
-This is a test document for the **{{project_name}}** v{{version}}.
+This is a test with an image:
+![Alt text](image.jpg)
 
-**Author:** {{author}}
-
-**Description:** {{description}}
-
-This document tests the configuration loading and variable substitution functionality.
-
-## Features Tested
-
-- Configuration loading from `petk.config.yaml`
-- Variable parsing and merging (CLI overrides config)
-- Watch mode functionality (if enabled)
-- Template processing with default settings
-
-Current timestamp: {{timestamp}}
+And some text.

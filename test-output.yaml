@@ -1,0 +1,56 @@
+metadata:
+  title: Test Markdown
+  createdAt: '2025-08-19T03:21:22.711Z'
+  modifiedAt: '2025-08-19T03:21:22.711Z'
+  source:
+    filename: test.md
+    path: test.md
+    size: 0
+    encoding: utf-8
+  parsing:
+    parser: marked
+    version: 16.2.0
+    timestamp: '2025-08-19T03:21:22.711Z'
+    options: {}
+  statistics:
+    totalLines: 0
+    contentItems: 3
+    wordCount: 14
+    characterCount: 79
+    multimodalItems: 0
+content:
+  - id: heading_0
+    type: heading
+    order: 0
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    level: 1
+    text: Test Markdown
+    anchor: test-markdown
+  - id: paragraph_1
+    type: paragraph
+    order: 1
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    text: |-
+      This is a test with an image:
+      ![Alt text](image.jpg)
+  - id: paragraph_2
+    type: paragraph
+    order: 2
+    sourceLineStart: 1
+    sourceLineEnd: 1
+    text: And some text.
+structure:
+  headings:
+    - id: heading_0
+      level: 1
+      text: Test Markdown
+      order: 0
+      children: []
+  tableOfContents:
+    - id: heading_0
+      title: Test Markdown
+      level: 1
+      anchor: test-markdown
+  multimodalAssets: []

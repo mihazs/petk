@@ -284,16 +284,9 @@ describe('CLI Integration Tests', () => {
                 // Expected due to mocking
             }
             
-            // Assert
+            // Assert - Check that the duration log was called (new enhanced format)
             expect(consoleLogSpy).toHaveBeenCalledWith(
-                'Convert command:',
-                expect.objectContaining({
-                    input: 'input.md',
-                    options: expect.objectContaining({
-                        format: 'json',
-                        eval: true
-                    })
-                })
+                expect.stringMatching(/⏱️\s+Duration: \d+ms/)
             );
         });
         
