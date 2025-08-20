@@ -262,7 +262,7 @@ This project is licensed under the MIT License. See the [LICENSE](./LICENSE) fil
 
 <div align="center">
 
-**[🚀 Get Started](#-installation)** • **[https://petk.dev/docs 📖 View Documentation](https://petk.dev/docs)** • **[🐛 Report Issues](https://github.com/mihazs/petk/issues)**
+**[🚀 Get Started](#-installation)** • **[https://petk.dev/docs 📖 View Documentation](https://petk.dev/docs)** • **[🐛 Report Issues](https://github.com/mihazs/petk/issues)** • **[Contribute](./CONTRIBUTING.md)**
 
 Made with ❤️ for the AI development community
 
