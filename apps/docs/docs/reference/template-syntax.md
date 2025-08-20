@@ -48,11 +48,11 @@ module.exports = {
 
 Directives are embedded in markdown code blocks using YAML syntax:
 
-```markdown
+````markdown
 ```{petk:include}
 path: shared/header.md
 ```
-```
+````
 
 ### Include Directive
 
@@ -60,7 +60,7 @@ The most powerful feature for embedding content from other files.
 
 #### Basic File Inclusion
 
-```markdown
+````markdown
 ```{petk:include}
 path: shared/header.md
 ```
@@ -70,13 +70,13 @@ path: templates/card.md
 title: My Card
 content: Card description
 ```
-```
+````
 
 #### Advanced Glob Patterns
 
 Include multiple files using glob patterns with sorting and filtering:
 
-```markdown
+````markdown
 ```{petk:include}
 glob: posts/**/*.md
 order_by: alphabetical_asc
@@ -94,7 +94,7 @@ order_by: random
 seed: 12345
 limit: 3
 ```
-```
+````
 
 #### Sorting Options
 
@@ -119,7 +119,7 @@ limit: 3
 
 Show or hide content based on conditions:
 
-```markdown
+````markdown
 ```{petk:if}
 condition: environment === 'development'
 ```
@@ -130,18 +130,18 @@ condition: user.role === 'admin'
 ```
 # Admin Panel
 Administrative content here.
-```
+````
 
 ### Variable Directive
 
 Define and use variables within templates:
 
-```markdown
+````markdown
 ```{petk:var}
 name: user_count
 value: 42
 ```
-```
+````
 
 **Configuration Example:**
 ```javascript
@@ -163,7 +163,7 @@ module.exports = {
 
 The template engine automatically handles nested includes with cycle detection:
 
-```markdown
+````markdown
 # Main Document
 ```{petk:include}
 path: sections/intro.md
@@ -174,7 +174,7 @@ path: sections/intro.md
 path: shared/welcome.md
 ```
 This creates a nested inclusion hierarchy.
-```
+````
 
 **Cycle Detection:** The engine prevents infinite loops by detecting circular include dependencies and reporting clear error messages.
 
@@ -182,7 +182,7 @@ This creates a nested inclusion hierarchy.
 
 Advanced file selection using glob patterns:
 
-```markdown
+````markdown
 ```{petk:include}
 glob: "**/*.md"
 exclude: "**/draft/**"
@@ -198,20 +198,20 @@ order_by: "last_updated_desc"
 limit: 10
 exclude: "{drafts,archive}/**"
 ```
-```
+````
 
 ### Deterministic Sampling
 
 Generate consistent random selections using seeds:
 
-```markdown
+````markdown
 ```{petk:include}
 glob: "examples/**/*.md"
 order_by: "random"
 seed: 42
 limit: 3
 ```
-```
+````
 
 This is useful for:
 - Consistent documentation builds
@@ -222,24 +222,24 @@ This is useful for:
 
 Pass variables to included files for dynamic content:
 
-```markdown
+````markdown
 ```{petk:include}
 path: "templates/feature.md"
 name: "Authentication"
 status: "stable"
 version: "2.1.0"
 ```
-```
+````
 
 **templates/feature.md:**
-```markdown
+````markdown
 ## {{name}} Feature
 
 **Status:** {{status}}  
 **Version:** {{version}}
 
 This feature provides...
-```
+````
 
 ## Configuration Integration
 
@@ -319,7 +319,7 @@ Referenced in: 'templates/layout.md' at line 10
 
 ### Glob Pattern Optimization
 
-```markdown
+````markdown
 ```{petk:include}
 glob: "docs/api/**/*.md"
 ```
@@ -327,7 +327,7 @@ glob: "docs/api/**/*.md"
 ```{petk:include}
 glob: "**/**/**/*.md"
 ```
-```
+````
 
 ### Caching
 
@@ -347,7 +347,7 @@ For large projects:
 
 ### Documentation Site
 
-```markdown
+````markdown
 ```{petk:include}
 path: "shared/header.md"
 title: "{{site.title}}"
@@ -364,11 +364,11 @@ order_by: "alphabetical_asc"
 ```{petk:include}
 path: "shared/footer.md"
 ```
-```
+````
 
 ### Blog Generation
 
-```markdown
+````markdown
 # Latest Posts
 
 ```{petk:include}
@@ -383,11 +383,11 @@ limit: 5
 glob: "posts/**/*.md"
 order_by: "last_updated_desc"
 ```
-```
+````
 
 ### Code Documentation
 
-```markdown
+````markdown
 # API Reference
 
 ```{petk:include}
@@ -403,7 +403,7 @@ order_by: "random"
 seed: 1234
 limit: 3
 ```
-```
+````
 
 ## Migration from Other Template Engines
 
@@ -424,7 +424,7 @@ user: users
 - {{user.name}} - {{user.email}}
 ```{petk:endfor}
 ```
-````
+`````
 
 ### From Jekyll/Liquid
 
@@ -436,7 +436,7 @@ user: users
 {% endfor %}
 ```
 
-```markdown
+````markdown
 ```{petk:include}
 path: "shared/header.md"
 title: "My Site"
@@ -446,7 +446,7 @@ title: "My Site"
 glob: "posts/**/*.md"
 limit: 5
 ```
-```
+````
 
 ## Debugging Templates
 
